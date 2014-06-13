@@ -16,7 +16,7 @@
 #include "pipstats_image_mono.h"
 
 
-#define XY_POS(x, y) (y * DIM_X * 3 + x * 3)
+#define XY_POS(x, y) (y * DIM_X * 2 + x * 2)
 
 
 struct RGBColor {
@@ -51,8 +51,8 @@ double colorHue = 0.08; //Interressante Farben sind ungefähr alle 1/7 auf der S
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
-void writeToFile(const char* name, byte* colors);
-void insertAt(byte* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono);
+void writeToFile(const char* name, double* hslColors, double colorHue);
+void insertAt(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono);
 double convertHueToRGB(double var1, double var2, double d);
 struct RGBColor convertHSLtoRGB(struct HSLColor color);
 struct HSLColor convertRGBtoHSL(struct RGBColor color);
@@ -75,43 +75,16 @@ struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y)
  */
 int main() //int argc, const char * argv[]
 {
-    byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
-    byte hslOutputArray[DIM_X * DIM_Y * 2]; //HSL color Array
+    //byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
+    double hslOutputArray[DIM_X * DIM_Y * 2]; //HSL color Array, only S and L.
     struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
     struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
     struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
     printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
     
-    for (int y = 0; y<DIM_Y; y++) {
-        for (int x = 0; x<DIM_X; x++) {
-            rgbOutputArray[XY_POS(x, y) + R] = tmpColor.r;
-            rgbOutputArray[XY_POS(x, y) + G] = tmpColor.g;
-            rgbOutputArray[XY_POS(x, y) + B] = tmpColor.b;
-        }
-
-    }
+    
     
     //Start der Objekt-Fälschungen
-    /*
-    struct image_mono test_image_mono;
-    test_image_mono.has_alpha = TEST_IMAGE_MONO_HAS_ALPHA;
-    test_image_mono.height = TEST_IMAGE_MONO_HEIGHT;
-    test_image_mono.width = TEST_IMAGE_MONO_WIDTH;
-    test_image_mono.data = test_image_mono_data;
-    
-    struct image_mono img_image_mono;
-    img_image_mono.has_alpha = IMG_IMAGE_MONO_HAS_ALPHA;
-    img_image_mono.height = IMG_IMAGE_MONO_HEIGHT;
-    img_image_mono.width = IMG_IMAGE_MONO_WIDTH;
-    img_image_mono.data = img_image_mono_data;
-    
-    struct image_mono schwarzlinie_image_mono;
-    schwarzlinie_image_mono.has_alpha = SCHWARZLINIE_IMAGE_MONO_HAS_ALPHA;
-    schwarzlinie_image_mono.height = SCHWARZLINIE_IMAGE_MONO_HEIGHT;
-    schwarzlinie_image_mono.width = SCHWARZLINIE_IMAGE_MONO_WIDTH;
-    schwarzlinie_image_mono.data = schwarzlinie_image_mono_data;
-     */
-    
     struct image_mono bg_resized_image_mono;
     bg_resized_image_mono.has_alpha = BG_RESIZED_IMAGE_MONO_HAS_ALPHA;
     bg_resized_image_mono.height = BG_RESIZED_IMAGE_MONO_HEIGHT;
@@ -125,15 +98,11 @@ int main() //int argc, const char * argv[]
     pipstats_image_mono.data = pipstats_image_mono_data;
     //Ende der Objekt-Fälschungen
     
-    insertAt(rgbOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
-    insertAt(rgbOutputArray, 39, 30, DIM_X, DIM_Y, & pipstats_image_mono);
+    insertAt(hslOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
+    insertAt(hslOutputArray, 39, 30, DIM_X, DIM_Y, & pipstats_image_mono); // 39,30
 
-    //insertAt(colorArray, 100, 2, DIM_X, DIM_Y, & img_image_mono);
-    //insertAt(colorArray, 55, 66, DIM_X, DIM_Y, & test_image_mono);
-    //insertAt(colorArray, 200, 100, DIM_X, DIM_Y, & img_image_mono);
-
-
-    writeToFile("first.ppm", rgbOutputArray);
+    
+    writeToFile("first.ppm", hslOutputArray, colorHue);
     return 0;
 }
 
@@ -156,7 +125,7 @@ int main() //int argc, const char * argv[]
  *
  *  Depricated: image_ type  Typ des Bildes (1 = y | 2 = y,a | 3 = r,g,b | 4 = r,g,b,a)
  */
-void insertAt(byte* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono){
+void insertAt(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono){
     
     byte* image = image_mono->data;
     int image_w = image_mono->width;
@@ -166,45 +135,14 @@ void insertAt(byte* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas
         for (int x = canvas_x; ( x < canvas_w ) && ( x - canvas_x < image_w) ; x++) {
             int canvas_pos = XY_POS(x, y);
             int image_pos = ((y-canvas_y) * image_w * (has_alpha?3:2)) + (x-canvas_x) * (has_alpha?3:2);
-            //TODO: fancy mathaematics
-            struct RGBColor canvas_rgb_pixel;
-            canvas_rgb_pixel.r = canvas[canvas_pos + R];
-            canvas_rgb_pixel.g = canvas[canvas_pos + G];
-            canvas_rgb_pixel.b = canvas[canvas_pos + B];
-            struct HSLColor canvas_hsl_pixel = convertRGBtoHSL(canvas_rgb_pixel);
-            struct HSLAColor image_hsla_pixel;
-            image_hsla_pixel.h = colorHue;
-            image_hsla_pixel.s = (image[image_pos + S] / 255.0);
-            image_hsla_pixel.l = (image[image_pos + L] / 255.0);
-            if (has_alpha){
-                image_hsla_pixel.alpha = (image[image_pos + A] / 255.0);
+            double alpha = 0;
+            if (has_alpha){  // effizienter mit (has_alpha ? (image[image_pos + A] / 255.0) : 1) ?
+                alpha = (image[image_pos + A] / 255.0);
             }else{
-                image_hsla_pixel.alpha = 1; //not transparent
+                alpha = 1; //not transparent
             }
-            struct HSLColor result;
-            //delta.h = canvas_hsl_pixel.h - image_hsla_pixel.h; //WARNING: Should allways be 0 !  //TODO: Print warning ?
-            //delta.s = canvas_hsl_pixel.s - image_hsla_pixel.s;
-            //delta.l = canvas_hsl_pixel.l - image_hsla_pixel.l;
-            
-            //result.h  = doMathMagic(canvas_hsl_pixel.h, image_hsla_pixel.h, image_hsla_pixel.alpha);
-            result.h = colorHue;
-            result.s  = doMathMagic(canvas_hsl_pixel.s, image_hsla_pixel.s, image_hsla_pixel.alpha);
-            result.l  = doMathMagic(canvas_hsl_pixel.l, image_hsla_pixel.l, image_hsla_pixel.alpha);
-            canvas_rgb_pixel  = convertHSLtoRGB(result);
-            canvas[canvas_pos + R] = canvas_rgb_pixel.r;
-            canvas[canvas_pos + G] = canvas_rgb_pixel.g;
-            canvas[canvas_pos + B] = canvas_rgb_pixel.b;
-            
-            //WARNING: Hue should be same, not changing. If  Hue is not the same, you failed!!
-
-            
-            /*
-            canvas[canvas_pos + R] = (image[image_pos + R] + colorModifier[R]) % 0xFF;
-            canvas[canvas_pos + G] = (image[image_pos + G] + colorModifier[G]) % 0xFF;
-            canvas[canvas_pos + B] = (image[image_pos + B] + colorModifier[B]) % 0xFF;
-            if (has_alpha){
-                canvas[canvas_pos + A] = (image[image_pos + A] + colorModifier[A]) % 0xFF;
-            }*/
+            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], image[image_pos + S] / 255.0, alpha);
+            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], image[image_pos + L] / 255.0, alpha);
         }
     }
 }
@@ -226,7 +164,7 @@ double doMathMagic(double canvas, double image, double alpha){
         return canvas;
     }
 }
-void writeToFile(const char* name, byte* colors) {
+void writeToFile(const char* name, double* hslColors, double colorHue) {
     FILE *fp = fopen(name, "wb"); /* b - binary mode */
     fprintf(fp, "P6\n%d %d\n255\n", DIM_X, DIM_Y);
     for (int y = 0; y < DIM_Y; y++)
@@ -234,9 +172,15 @@ void writeToFile(const char* name, byte* colors) {
         for (int x = 0; x < DIM_X; x++)
         {
             static unsigned char color[3];
-            color[0] = colors[XY_POS(x, y) + R];// % 256;  /* red */
-            color[1] = colors[XY_POS(x, y) + G];//j % 256;  /* green */
-            color[2] = colors[XY_POS(x, y) + B];//(i * j) % 256;  /* blue */
+            struct HSLColor image_hsla_pixel;
+            int i = (y * DIM_X * 2) + (x * 2);
+            image_hsla_pixel.h = colorHue;
+            image_hsla_pixel.s = (hslColors[i + S]);
+            image_hsla_pixel.l = (hslColors[i + L]);
+            struct RGBColor rgb_pixel  = convertHSLtoRGB(image_hsla_pixel);
+            color[0] = rgb_pixel.r;
+            color[1] = rgb_pixel.g;
+            color[2] = rgb_pixel.b;
             fwrite(color, 1, 3, fp);
         }
     }
@@ -402,6 +346,9 @@ struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y)
     result.x = (canvas_x / 2) - (image_x / 2);
     result.y = (canvas_y / 2) - (image_y / 2);
     return result;
+}
+void drawLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h){
+    
 }
 
 
