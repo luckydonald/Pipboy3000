@@ -39,6 +39,7 @@
 
 
 typedef unsigned char byte;
+//typedef char[] string;
 #endif
 
 

@@ -25,9 +25,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		85598D761965A250000D214C /* font_a.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_a.h; sourceTree = "<group>"; };
+		85598D781966A222000D214C /* FONT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FONT.h; sourceTree = "<group>"; };
+		85598D791966A263000D214C /* LINE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LINE.h; sourceTree = "<group>"; };
+		85598D7A1966A363000D214C /* font_monofont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont.h; sourceTree = "<group>"; };
+		85700E07194DD63E00164A32 /* bg_resized_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bg_resized_image_mono.h; sourceTree = "<group>"; };
+		85700E08194DD63E00164A32 /* pipstats_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pipstats_image_mono.h; sourceTree = "<group>"; };
 		859EE7091947819D00600C51 /* helloC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloC; sourceTree = BUILT_PRODUCTS_DIR; };
 		859EE70C1947819D00600C51 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		859EE70E1947819D00600C51 /* helloC.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = helloC.1; sourceTree = "<group>"; };
+		85FDE664194F146B00D7D7EC /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +67,15 @@
 		859EE70B1947819D00600C51 /* helloC */ = {
 			isa = PBXGroup;
 			children = (
+				85FDE664194F146B00D7D7EC /* main.h */,
+				85700E07194DD63E00164A32 /* bg_resized_image_mono.h */,
+				85700E08194DD63E00164A32 /* pipstats_image_mono.h */,
 				859EE70C1947819D00600C51 /* main.c */,
 				859EE70E1947819D00600C51 /* helloC.1 */,
+				85598D791966A263000D214C /* LINE.h */,
+				85598D761965A250000D214C /* font_a.h */,
+				85598D781966A222000D214C /* FONT.h */,
+				85598D7A1966A363000D214C /* font_monofont.h */,
 			);
 			path = helloC;
 			sourceTree = "<group>";
@@ -227,6 +241,7 @@
 				859EE7141947819D00600C51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -6,14 +6,105 @@
 //  Copyright (c) 2014 Tasso (Ich). All rights reserved.
 //
 
+
+
+
+/*
+ *
+ *
+ *
+ *      ,o888888o.        ,o888888o.     8 8888888888   8 8888888888   8 8888888888   8 8888888888
+ *     8888     `88.   . 8888     `88.   8 8888         8 8888         8 8888         8 8888
+ *  ,8 8888       `8. ,8 8888       `8b  8 8888         8 8888         8 8888         8 8888
+ *  88 8888           88 8888        `8b 8 8888         8 8888         8 8888         8 8888
+ *  88 8888           88 8888         88 8 888888888888 8 888888888888 8 888888888888 8 888888888888
+ *  88 8888           88 8888         88 8 8888         8 8888         8 8888         8 8888
+ *  88 8888           88 8888        ,8P 8 8888         8 8888         8 8888         8 8888
+ *  `8 8888       .8' `8 8888       ,8P  8 8888         8 8888         8 8888         8 8888
+ *     8888     ,88'   ` 8888     ,88'   8 8888         8 8888         8 8888         8 8888
+ *      `8888888P'        `8888888P'     8 8888         8 8888         8 888888888888 8 888888888888
+ *
+ *   ____                                           _
+ *  / ___| _ __   ___  _ __  ___  ___  _ __ ___  __| |
+ *  \___ \| '_ \ / _ \| '_ \/ __|/ _ \| '__/ _ \/ _` |
+ *   ___) | |_) | (_) | | | \__ \ (_) | | |  __/ (_| |
+ *  |____/| .__/ \___/|_| |_|___/\___/|_|  \___|\__,_|
+ *        |_|
+ *   _
+ *  | |__  _   _
+ *  | '_ \| | | |
+ *  | |_) | |_| |
+ *  |_.__/ \__, |
+ *          |___/
+ *
+ *
+ *   _     _   _                   ____   __ _       _   _            _                 _
+ *  | |   | | | |          _      / / /  / _| |     | | | |          | |               | |
+ *  | |__ | |_| |_ _ __   (_)    / / /  | |_| |_   _| |_| |_ ___ _ __| |__         __ _| |_
+ *  | '_ \| __| __| '_ \        / / /   |  _| | | | | __| __/ _ \ '__| '_ \       / _` | __|
+ *  | | | | |_| |_| |_) |  _   / / /    | | | | |_| | |_| ||  __/ |  | |_) |  _  | (_| | |_
+ *  |_| |_|\__|\__| .__/  (_) /_/_/     |_| |_|\__,_|\__|\__\___|_|  |_.__/  (_)  \__,_|\__|
+ *                | |
+ *                |_|
+ *
+ *
+ *                             //            .
+ *                          |,'/             \'
+ * .                       //-+ .,-----...    \ \                       -
+ *                        /'|_|--'  '     `-\_ \ <\
+ *  \ `                  / ,' _.._           :-[   \                ,' '
+ *   \ `.                ,',-'    -._        |   \ |               /  /
+ *    \  `              / /          \A      |  /X:|             ,'  /
+ *     \   \           / /             \     ; /XX| |          ,'   /
+ *      \   `.        | ;        _,.   | ,--/' (XX  |        ,'    /
+ *       \    `._     |;        -   \  ,'      \+  .'     _,'     /
+ *        \      `-.  |'       ,"8b  ,'   op=.    ,'   ,,'       /
+ *         \        `-|       |_o88b    ,88b YL  /   ,'         |
+ *         \           ||.     8888b    d88bbo8L`' ,'          .'
+ *          |           .`.    8888P    88888P'.'i'            |
+ *          |           '  \   `88P     Y8888 .' \             |
+ *          |       .  ,-'' `    ' °  °  `""   ||              |
+ *         ,       .|.' _,_ || | | `---'       '|               `
+ *        --.._    | | /  ' '|   |        /     /           _.--''
+ *             `.  '.  \   _'  | |       /    '|          ,'
+ *               \  `.  `''   ,''      ,'|  .  '         .'
+ *                \   `.    _, |     -- |   |'/          |
+ *                '.    |:::            |   |  ``..__   /
+ *                 L,--'    `-         _\   `-- |    `-.
+ *                            '       /  `._   /
+ *                          ,'   |   /      `'`.
+ *                         /   | |  .'   |  /   `.
+ *                         |   \|   |     /-'    |
+ *                     __  '    |   |     \       |
+ *         _,.-===['''---''     |   |      \     |
+ *     _.`=_`...    ''  '''--. |    |      |   _   _
+ *    '_,-'                   `|     \     '        `.
+ *    '             ,'.        |     '   ,'          |
+ *  .'             |  -.._____/       .''-..___  _,,,'
+ *  |              \          `       |
+ *  \ )|      |  /`.],         `'---''
+ *   / \      '   ._  '
+ *      `.        _ `-..__
+ *        ``--......=....-----'
+ *
+ */
+
+
 #include <stdio.h>
 #include "main.h"
+
+#include "FONT.h"
+#include "LINE.h"
 
 //#include "test_image_mono.h"
 //#include "img_image_mono.h"
 //#include "schwarzlinie_image_mono.h"
 #include "bg_resized_image_mono.h"
 #include "pipstats_image_mono.h"
+
+//Fonts
+#include "font_monofont.h"
+
 
 
 #define XY_POS(x, y) (y * DIM_X * 2 + x * 2)
@@ -64,6 +155,12 @@ double min(double a, double b);
 struct HSLColor newHSL(double h, double s, double l);
 struct RGBColor newRGB(double r, double g, double b);
 struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y);
+void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height);
+void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height, byte where);
+void type_string(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct font* fontfile, struct HSLColor color, char *StringOfCharacters) ;
+int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, int x_pos, struct font* fontfile, struct HSLColor color, unsigned char character);
+
+
 // Ende der Auflistung.
 
 
@@ -73,7 +170,7 @@ struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y)
  * Generiert den Hintergrund, und platziert dann die einzelnen Bildfagmente darauf.
  *
  */
-int main() //int argc, const char * argv[]
+int main() //int argc, const char * argv[] //hauptteil
 {
     //byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
     double hslOutputArray[DIM_X * DIM_Y * 2]; //HSL color Array, only S and L.
@@ -96,11 +193,93 @@ int main() //int argc, const char * argv[]
     pipstats_image_mono.height = PIPSTATS_IMAGE_MONO_HEIGHT;
     pipstats_image_mono.width = PIPSTATS_IMAGE_MONO_WIDTH;
     pipstats_image_mono.data = pipstats_image_mono_data;
+    
+    struct font monofont_font;
+    monofont_font.first_char = MONOFONT_FONT_FIRST_CHAR;
+    monofont_font.last_char = MONOFONT_FONT_LAST_CHAR;
+    monofont_font.has_alpha = MONOFONT_FONT_HAS_ALPHA;
+    monofont_font.info = monofont_font_info;
+    monofont_font.data = monofont_font_data;
     //Ende der Objekt-Fälschungen
     
-    insertAt(hslOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
-    insertAt(hslOutputArray, 39, 30, DIM_X, DIM_Y, & pipstats_image_mono); // 39,30
+    //Image Checks
+insertAt(hslOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
+//insertAt(hslOutputArray, 39, 30, DIM_X, DIM_Y, & pipstats_image_mono); //FALLOUT BOY
+   
+    //checks
+    
+    //Normal Line Checks
+    
+    //void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height);
+    /*drawNormalLine(hslOutputArray, 10, 10, DIM_X, DIM_Y, 50, 2);
+    drawNormalLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65, 2);
+    drawNormalLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80, 2);
+    drawNormalLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2);
+    drawNormalLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100);
+    drawNormalLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100);
+    drawNormalLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100);
+    drawNormalLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100);
+    drawNormalLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100);
+    */
+  
+    /*
+    drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y,  50, 2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y,  65, 2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y,  50, 2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y,  80, 2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y,  50, 2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 60, DIM_X, DIM_Y, 100, 2, LEFT);
+    
+    drawFadedLine(hslOutputArray, 20, 70, DIM_X, DIM_Y, 2, 100, NONE);
+    drawFadedLine(hslOutputArray, 30, 70, DIM_X, DIM_Y, 2, 100, TOP);
+    drawFadedLine(hslOutputArray, 40, 70, DIM_X, DIM_Y, 2, 100, NONE);
+    drawFadedLine(hslOutputArray, 50, 70, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
+    drawFadedLine(hslOutputArray, 60, 70, DIM_X, DIM_Y, 2, 100, NONE);
+    drawFadedLine(hslOutputArray, 70, 70, DIM_X, DIM_Y, 2, 100, BOTTOM);
+    drawFadedLine(hslOutputArray, 80, 70, DIM_X, DIM_Y, 2, 100, NONE);
+    */
+    /*drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y, 50,  2, LEFT);
+    drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65,  2, RIGHT);
+    drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80,  2, TOP);
+    drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2, BOTTOM);
+    drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100, TOP);
+    drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
+    drawFadedLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+    drawFadedLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+    drawFadedLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+    */
+    
+    
+    /*
+    drawFadedLine(hslOutputArray,   0,   0, DIM_X, DIM_Y, 50, 50, LEFT);
+    drawFadedLine(hslOutputArray,  60,   0, DIM_X, DIM_Y, 50, 50, TOP);
+    drawFadedLine(hslOutputArray, 120,   0, DIM_X, DIM_Y, 50, 50, RIGHT);
+    drawFadedLine(hslOutputArray, 180,   0, DIM_X, DIM_Y, 50, 50, BOTTOM);
 
+    drawFadedLine(hslOutputArray,   0,  60, DIM_X, DIM_Y, 50, 50, NONE);
+    drawFadedLine(hslOutputArray,  60,  60, DIM_X, DIM_Y, 50, 50, BOTTOM+TOP);
+    drawFadedLine(hslOutputArray, 120,  60, DIM_X, DIM_Y, 50, 50, LEFT+RIGHT);
+    drawFadedLine(hslOutputArray, 180,  60, DIM_X, DIM_Y, 50, 50, LEFT+TOP+RIGHT+BOTTOM);
+    
+    drawFadedLine(hslOutputArray,   0, 120, DIM_X, DIM_Y, 50, 50, LEFT+TOP);
+    drawFadedLine(hslOutputArray,  60, 120, DIM_X, DIM_Y, 50, 50, TOP+RIGHT);
+    drawFadedLine(hslOutputArray, 120, 120, DIM_X, DIM_Y, 50, 50, RIGHT+BOTTOM);
+    drawFadedLine(hslOutputArray, 180, 120, DIM_X, DIM_Y, 50, 50, LEFT+BOTTOM);
+    */
+
+
+//drawNormalLine(hslOutputArray, 10, 10, DIM_X, DIM_Y,  340, 1);
+//drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y,  1, 20, BOTTOM);
+//drawFadedLine(hslOutputArray, 350, 10, DIM_X, DIM_Y,  1, 20, BOTTOM);
+    /**/
+    struct HSLColor color;
+    color.h = colorHue;
+    color.s = 1;//223/255;
+    color.l = 127.0/255.0;//56/255;
+    type_string(hslOutputArray, 10, 10,  DIM_X, DIM_Y, &monofont_font, color, "3");
+    
+    //Faded Line Checks
+    //drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 50, 50, LEFT);
     
     writeToFile("first.ppm", hslOutputArray, colorHue);
     return 0;
@@ -149,22 +328,27 @@ void insertAt(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canv
 /**
  *
  * Berechnet die Zahl zwischen A (canvas) und B (image) abhängig von alpha,
- * wenn alpha = 0 ist, dann kommt die orginale Zahl A (canvas) raus
+ * wird genutzt um die Mitte von 2 Farben zu finden.
+ * Wenn alpha = 0 ist, dann kommt die orginale Zahl A (canvas) raus
  * wenn alpha = 1 ist, dann die Zahl des einzufügenden image s B
  * wenn alpha = 0.5 genau die Mitte
  * und bei anderen alphas zwischen 0 und 1 die passende Relation.
  *
  */
 double doMathMagic(double canvas, double image, double alpha){
-    if (canvas < image) {
+    if (canvas < image) { // kleiner
         return (canvas + (alpha * (image - canvas)));
-    } else if(image < canvas){
+    } else if(image < canvas){ // größer
         return (image + ((1 - alpha) * (canvas - image)));
-    } else {
+    } else { // gleich
         return canvas;
     }
 }
+
+
 void writeToFile(const char* name, double* hslColors, double colorHue) {
+    
+    printf("Starting image output to \"%s\".", name);
     FILE *fp = fopen(name, "wb"); /* b - binary mode */
     fprintf(fp, "P6\n%d %d\n255\n", DIM_X, DIM_Y);
     for (int y = 0; y < DIM_Y; y++)
@@ -175,6 +359,7 @@ void writeToFile(const char* name, double* hslColors, double colorHue) {
             struct HSLColor image_hsla_pixel;
             int i = (y * DIM_X * 2) + (x * 2);
             image_hsla_pixel.h = colorHue;
+            
             image_hsla_pixel.s = (hslColors[i + S]);
             image_hsla_pixel.l = (hslColors[i + L]);
             struct RGBColor rgb_pixel  = convertHSLtoRGB(image_hsla_pixel);
@@ -185,6 +370,7 @@ void writeToFile(const char* name, double* hslColors, double colorHue) {
         }
     }
     fclose(fp);
+    printf("Successfully printed image to \"%s\".", name);
 }
 
 
@@ -347,12 +533,136 @@ struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y)
     result.y = (canvas_y / 2) - (image_y / 2);
     return result;
 }
-void drawLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h){
-    
+void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height){
+    //calc
+    struct HSLColor color;
+    color.h = colorHue;
+    color.s = 1;//223/255;
+    color.l = 127.0/255.0;//56/255;
+    //printf("Drawing Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
+    for (int x = canvas_x; x < canvas_x + width &&  canvas_x + x < canvas_w; x++) {
+        for (int y = canvas_y; y < canvas_y + height &&  canvas_y + y < canvas_h; y++) {
+            int canvas_pos = XY_POS(x, y);
+            canvas[canvas_pos + S] = color.s;
+            canvas[canvas_pos + L] = color.l;
+                //printf("Drawing Line Pixel: (x: %d, y: %d) => (h: %f, s: %f, l: %f)\n\n", x, y, color.h, color.s, color.l);
+        }
+    }
 }
 
+void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height, byte where){
+    //cal
+    struct HSLColor color;
+    color.h = colorHue;
+    color.s = 1;//223/255;
+    color.l = 0.5; //127.0/255.0;
+    printf("Drawing Faded Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
+    printf("Output: (where: %d, LEFT: %d, TOP: %d, RIGHT: %d, BOTTOM: %d, isLEFT: %s, isTOP: %s, isRIGHT: %s, isBOTTOM: %s)\n\n", where, LEFT, TOP, RIGHT, BOTTOM, (where & LEFT ? "true":"false"),(where & TOP ? "true":"false"),(where & RIGHT ? "true":"false"),(where & BOTTOM ? "true":"false"));
+    //for (int y = canvas_y; ( y < canvas_h ) && ( y - canvas_y < image_h) ; y++) {
 
+    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + canvas_w; x++) { //TODO: < oder <= ?
+        for (int y = canvas_y; y < canvas_y + height &&  y < canvas_y + canvas_h; y++) { //TODO: < oder <= ?
+            int canvas_pos = XY_POS(x, y);
+            canvas[canvas_pos + S] = color.s;
+            double alphaX  = 1;//bla
+            if((where & LEFT) && (x - canvas_x < 16)){
+                alphaX  =  min(alphaX, ((x - canvas_x) * 0.0625)); // 1/8 = 0.125 alpha per px
+                //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
+            }
+            if((where & RIGHT) && width - (x - canvas_x) < 16){
+                alphaX  =  min(alphaX, (width - (x - canvas_x)) * 0.0625);
+            }
+            if((where & TOP) && (y - canvas_y < 16)){
+                 alphaX  =  min(alphaX, ((y - canvas_y) * 0.0625)); // 1/8 = 0.125 alpha per px
+                                                                  //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
+            }
+            if((where & BOTTOM) && height - (y - canvas_y) < 16){
+                 alphaX  =  min(alphaX, (height - (y - canvas_y)) * 0.0625);
+            }
+            
+            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alphaX);
+            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alphaX);
+            //printf("Drawing Line Pixel: (x: %d, y: %d) => (h: %f, s: %f, l: %f)\n\n", x, y, color.h, color.s, color.l);
+        }
+    }
+    
+}
+// char Test[12] = {'H','a','l','l','o',' ','W','o','r','l','d','\0'};
+// das abschliessende \0 nicht vergessen! Sonst ist
+// das kein String!
+//Test[11] = '\0';
 
+// type_string("NewbieHack.com");
+/**
+ * @param x_pos the pixel offset to the given canvas_x, used to write more than 1 char, accounting previous char's width.
+ *
+ */
+
+int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, int x_pos, struct font* fontfile, struct HSLColor color, unsigned char character){
+    if(character > fontfile->last_char) {
+        printf("Error: Out of range!\n");
+        return 0;
+    }
+    printf("Running.\n");
+    int charOffset = character - fontfile->first_char;
+    struct charInfo char_i;
+    char_i.width  = fontfile->info[(charOffset*5) + CHAR_WIDTH];
+    char_i.height = fontfile->info[(charOffset*5) + CHAR_HEIGHT];
+    char_i.offset = fontfile->info[(charOffset*5) + CHAR_OFFSET];
+    char_i.start  = fontfile->info[(charOffset*5) + CHAR_START];
+    char_i.length = fontfile->info[(charOffset*5) + CHAR_LENGTH];
+    int pos = -1;
+    canvas_x = canvas_x + x_pos;
+    printf("Still Running.\n");
+    printf("Output char %d [%c] with offset %d. This is #%d\n", character,character, x_pos, charOffset);
+    x_pos = x_pos + char_i.width; //after everything important
+    for (int y = 0; y < char_i.height; y++) {
+        for (int x = 0; x < char_i.width; x++) {
+            int curr_x = canvas_x + x;
+            int curr_y = canvas_y + y;
+            pos = ((x) + (y * char_i.width));
+
+            //check canvas out of bounds
+            if(curr_x > canvas_w){
+                printf("[%c] Out Of Range (X)... (([x:%d|%d:y] start: %d, pos: %d, offset:%d, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
+
+                continue;
+            }else if (curr_y > canvas_h){
+                printf("[%c] Out Of Range (Y)... (([x:%d|%d:y] start: %d, pos: %d, offset:%d, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
+                continue;
+            }else if(pos < char_i.start){ //check if we can start? else keep moving untill we reached the right pixel where to start.
+                                           //TODO mayby 1 to late? running again at 74, with 73 in the file
+                                           //TODO fix in java
+                printf("[%c] Skipping... ([x:%d|%d:y] start: %d, pos: %d, offset:%d, length: %d)\n", character, curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length);
+                int canvas_pos = XY_POS(curr_x,curr_y);
+                canvas[canvas_pos + S] = 1.0;
+                canvas[canvas_pos + L] = 1.0;
+                continue; //used to calculate the x,y of the start, most efficient way I guess (modulo makes a for-loop too when compiled.)
+            }else if(pos >= char_i.length + char_i.offset){
+                printf("[%c] Done! ([x:%d|%d:y] start: %d, pos: %d, offset:%d, length: %d)\n", character, curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length);
+                return x_pos; //done!
+            } //else: we are in range of the char array.
+            
+            long canvas_pos = ((curr_x) + (curr_y * DIM_Y))*2; //otherwise to small!
+            canvas_pos = XY_POS(curr_x,curr_y);
+            //((10+0)*2) + ((10 +0)*2*240) = 4820;
+            long font_pos = char_i.offset + pos;
+            double alpha = (fontfile->data[font_pos]/255.0);
+            printf("[%c] Drawing (([x:%d|%d:y] start: %d, pos: %d, offset:%d, length: %d Alpha: %3d[%3ld] > %2f) to x:%d y:%d = %ld\n", character,curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length, fontfile->data[font_pos],font_pos,alpha, curr_x,curr_y, canvas_pos);
+            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alpha);
+            //(171+139+137+41+171+171+101+51+12+21+148+134+131+136)+(0+131+43+122) = 1860 / 01804.
+            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alpha);
+        }
+    }
+    return x_pos;
+}
+void type_string(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct font* fontfile, struct HSLColor color, char *StringOfCharacters) {
+    int i = 0;
+    while(*StringOfCharacters > 0)
+    {
+        i = type_char(canvas, canvas_x, canvas_y, canvas_w, canvas_h, i, fontfile, color, *StringOfCharacters++);
+    }
+}
 
 
 
