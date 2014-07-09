@@ -90,6 +90,8 @@
  */
 
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include "main.h"
 
@@ -195,7 +197,7 @@ struct font font_monofont_24;
 int main() //int argc, const char * argv[] //hauptteil
 {
     //byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
-    double hslOutputArray[DIM_X * DIM_Y * 2]; //HSL color Array, only S and L.
+	double *hslOutputArray = malloc(sizeof(double) * DIM_X * DIM_Y * 2); //HSL color Array, only S and L.
     //struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
     //struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
     //struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
@@ -345,6 +347,8 @@ int main() //int argc, const char * argv[] //hauptteil
     //Faded Line Checks
     //drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 50, 50, LEFT);
     
+	free(hslOutputArray);
+
     return 0;
 }
 
