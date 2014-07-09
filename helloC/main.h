@@ -18,8 +18,8 @@
   //=========
  // Image Size
 //
-#define DIM_X 360
-#define DIM_Y 240
+#define DIM_X 480 //360
+#define DIM_Y 272 //240
 
   //========
  // RGB

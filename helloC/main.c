@@ -150,7 +150,7 @@ struct pos {
 
 
 //byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
-double colorHue = 0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
+double colorHue = 0;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
@@ -196,9 +196,9 @@ int main() //int argc, const char * argv[] //hauptteil
 {
     //byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
     double hslOutputArray[DIM_X * DIM_Y * 2]; //HSL color Array, only S and L.
-    struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
-    struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
-    struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
+    //struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
+    //struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
+    //struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
     //printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
     
     //Start der Objekt-Fälschungen
@@ -252,10 +252,22 @@ int main() //int argc, const char * argv[] //hauptteil
     //Ende der Objekt-Fälschungen
     
     //Image Checks
-insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
-
-    
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
+    writeToFile("first_Status_CND.ppm", hslOutputArray, colorHue);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
+    writeToFile("first_SPECIAL.ppm", hslOutputArray, colorHue);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SKILLS,0);
+    writeToFile("first_Skills.ppm", hslOutputArray, colorHue);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_PERKS,0);
+    writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL,0);
+    writeToFile("first_General.ppm", hslOutputArray, colorHue);
+
     //checks
     
     //Normal Line Checks
@@ -333,7 +345,6 @@ insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     //Faded Line Checks
     //drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 50, 50, LEFT);
     
-    writeToFile("first.ppm", hslOutputArray, colorHue);
     return 0;
 }
 
@@ -725,6 +736,9 @@ int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfil
     }
     return i;
 }
+void die(char *StringOfCharacters){
+    printf("#######################\nCRITICAL ERROR.%s\n#######################",StringOfCharacters);
+};
 void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int height){
     for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
         for (int y = canvas_y; y < canvas_y + height &&  y < canvas_y + DIM_Y; y++) { //TODO: < oder <= ?
@@ -750,55 +764,72 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         type_string(canvas, 27, 1, & font_monofont_18, "STATS", 2); //  STATS text in topline
         drawNormalLine(canvas, 77 , 10, 273, 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, 350, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+        if (tab & TAB_STAT_STATUS) {
         // SIDE TABS
-        if(tab & MODE_STATUS_CND) {
-            drawBox(canvas, 5, 32,  35, 20);
-        } else if(tab & MODE_STATUS_RAD) {
-            drawBox(canvas, 5, 52,  35, 20);
+            if(tab & MODE_STATUS_CND) {
+                drawBox(canvas, 5, 32,  35, 20);
+            } else if(tab & MODE_STATUS_RAD) {
+                drawBox(canvas, 5, 52,  35, 20);
+            } else {
+                drawBox(canvas, 5, 72,  35, 20);
+            }
+            type_string(canvas, 14, 34, & font_monofont_16, "CND", 0);
+            type_string(canvas, 14, 54, & font_monofont_16, "RAD", 0);
+            type_string(canvas, 14, 74, & font_monofont_16, "EFF", 0);
+            // MAIN STUFF
+            if(tab & MODE_STATUS_CND) {
+                insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
+                type_string(canvas, 100, 200, & font_monofont_16_b, "LittlePip - Level 20", 0);
+            }
+            drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - Status
+        } else if (tab & TAB_STAT_SPECIAL) {
+            drawBox(canvas, 74, DIM_Y - 21,  70, 20);  // - - - S.P.E.C.I.A.L.
+        } else if (tab & TAB_STAT_SKILLS) {
+            drawBox(canvas, 155, DIM_Y - 21,  50, 20); // - - - Skills
+        } else if (tab & TAB_STAT_PERKS) {
+            drawBox(canvas, 223, DIM_Y - 21,  44, 20); // - - - Perks
+        } else if (tab & TAB_STAT_GENERAL) { //TAB_STAT_GENERAL
+            drawBox(canvas,  DIM_X - 20 - 42 - 7 - 7, DIM_Y - 21,  56, 20); // - - - General
+
         } else {
-            drawBox(canvas, 5, 72,  35, 20);
-        }
-        type_string(canvas, 14, 34, & font_monofont_16, "ZST", 0);
-        type_string(canvas, 14, 54, & font_monofont_16, "RAD", 0);
-        type_string(canvas, 14, 74, & font_monofont_16, "EFF", 0);
-        // MAIN STUFF
-        if(tab & MODE_STATUS_CND) {
-            insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
-            type_string(canvas, 100, 200, & font_monofont_16_b, "LittlePip - Level 20", 0);
+            die("Unknown STATS tab.");
         }
         
-        
-        // BOTTOM LINE
-        int textend; //TODO REMOVE!
-        drawFadedLine(canvas, 10, DIM_Y - 28,  1, 18, TOP); // - - - - - - - top line, faded part, left side
-        int o = 162 - 156; //offset
+        // BOTTOM LINE, all need that.
+        drawFadedLine(canvas, 10, DIM_Y - 27,  1, 18, TOP); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 10, DIM_Y - 10, 10, 1); // - - - - - - - - - - - top line, part one
-        drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - STATUS
+        type_string(canvas, 27,  DIM_Y - 19, & font_monofont_16, "Status", 0);
         drawNormalLine(canvas, 69 , DIM_Y - 10, 5, 1); // - - - - - - - - - - top line, part 2
-        drawBox(canvas, 74, DIM_Y - 21,  70, 20);  // - - - SPECIAL
+        type_string(canvas, 81,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2);
         drawNormalLine(canvas, 144 , DIM_Y - 10, 11, 1); // - - - - - - - - - - top line, part 2
-        drawBox(canvas, 155, DIM_Y - 21,  50, 20); // - - - Skills
-        
-        drawFadedLine(canvas, 350, DIM_Y - 28, 1, 18, TOP); // - - - - - - - top line, faded part, right side
+        type_string(canvas, 162,  DIM_Y - 19, & font_monofont_16, "Skills", 0);
+        drawNormalLine(canvas, 205 , DIM_Y - 10, 19, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 230  ,  DIM_Y - 19, & font_monofont_16, "Perks", 0);
+        drawNormalLine(canvas, 267 , DIM_Y - 10, 18, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, DIM_X-20 - 42 - 7 ,  DIM_Y - 19, & font_monofont_16, "General", 0);
+        drawNormalLine(canvas, 340 , DIM_Y - 10, 10, 1); // - - - - - - - - - - top line, part 2
+
+        drawFadedLine(canvas, 350, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
 
                             //(68 * 0) + 44
+        /*
+         // Tab Marker
         drawFadedLine(canvas,  44, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
         drawFadedLine(canvas, 112, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
         drawFadedLine(canvas, 180, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
         drawFadedLine(canvas, 248, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
         drawFadedLine(canvas, 316, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-
-        type_string(canvas, 27,  DIM_Y - 19, & font_monofont_16, "Status", 0); //  STATS text in topline //+7 to box
+        */
         
-        drawNormalLine(canvas, 69 , DIM_Y - 10, 5, 1); // - - - - - - - - - - top line, part 2
-        textend = type_string(canvas, 81,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2); // 84 px wide.  pos x = (84/2) + 112; ((84-30)/2) +44
-        textend = type_string(canvas, 162,  DIM_Y - 19, & font_monofont_16, "Skills", 0); // 84 px wide.  pos x = (84/2) + 112; ((84-30)/2) +44
+
 
         //int textend =
-        printf("#######################\nLength: %d\n#######################\n", textend);
+        //printf("#######################\nLength: %d\n#######################\n", textend);
 
         
     } else if (screen & SCREEN_GGST) {
+        
+    } else if (screen & SCREEN_DATEN){
         
     }
 

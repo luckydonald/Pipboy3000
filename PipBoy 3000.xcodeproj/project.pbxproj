@@ -37,7 +37,7 @@
 		856302AE196D536D00410E88 /* font_monofont_14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_14.h; sourceTree = "<group>"; };
 		85700E07194DD63E00164A32 /* bg_resized_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bg_resized_image_mono.h; sourceTree = "<group>"; };
 		85700E08194DD63E00164A32 /* pipstats_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pipstats_image_mono.h; sourceTree = "<group>"; };
-		859EE7091947819D00600C51 /* helloC */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = helloC; sourceTree = BUILT_PRODUCTS_DIR; };
+		859EE7091947819D00600C51 /* PipBoy 3000 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PipBoy 3000"; sourceTree = BUILT_PRODUCTS_DIR; };
 		859EE70C1947819D00600C51 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		859EE70E1947819D00600C51 /* helloC.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = helloC.1; sourceTree = "<group>"; };
 		85FDE664194F146B00D7D7EC /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
@@ -65,7 +65,7 @@
 		859EE70A1947819D00600C51 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				859EE7091947819D00600C51 /* helloC */,
+				859EE7091947819D00600C51 /* PipBoy 3000 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		859EE7081947819D00600C51 /* helloC */ = {
+		859EE7081947819D00600C51 /* PipBoy 3000 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 859EE7121947819D00600C51 /* Build configuration list for PBXNativeTarget "helloC" */;
+			buildConfigurationList = 859EE7121947819D00600C51 /* Build configuration list for PBXNativeTarget "PipBoy 3000" */;
 			buildPhases = (
 				859EE7051947819D00600C51 /* Sources */,
 				859EE7061947819D00600C51 /* Frameworks */,
@@ -107,9 +107,9 @@
 			);
 			dependencies = (
 			);
-			name = helloC;
+			name = "PipBoy 3000";
 			productName = helloC;
-			productReference = 859EE7091947819D00600C51 /* helloC */;
+			productReference = 859EE7091947819D00600C51 /* PipBoy 3000 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -121,7 +121,7 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
 			};
-			buildConfigurationList = 859EE7041947819D00600C51 /* Build configuration list for PBXProject "helloC" */;
+			buildConfigurationList = 859EE7041947819D00600C51 /* Build configuration list for PBXProject "PipBoy 3000" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -133,7 +133,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				859EE7081947819D00600C51 /* helloC */,
+				859EE7081947819D00600C51 /* PipBoy 3000 */,
 			);
 		};
 /* End PBXProject section */
@@ -223,21 +223,21 @@
 		859EE7131947819D00600C51 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "PipBoy 3000";
 			};
 			name = Debug;
 		};
 		859EE7141947819D00600C51 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "PipBoy 3000";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		859EE7041947819D00600C51 /* Build configuration list for PBXProject "helloC" */ = {
+		859EE7041947819D00600C51 /* Build configuration list for PBXProject "PipBoy 3000" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				859EE7101947819D00600C51 /* Debug */,
@@ -246,7 +246,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		859EE7121947819D00600C51 /* Build configuration list for PBXNativeTarget "helloC" */ = {
+		859EE7121947819D00600C51 /* Build configuration list for PBXNativeTarget "PipBoy 3000" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				859EE7131947819D00600C51 /* Debug */,

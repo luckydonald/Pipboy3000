@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "859EE7081947819D00600C51"
                BuildableName = "helloC"
-               BlueprintName = "helloC"
-               ReferencedContainer = "container:helloC.xcodeproj">
+               BlueprintName = "PipBoy 3000"
+               ReferencedContainer = "container:PipBoy 3000.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,8 +34,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
             BuildableName = "helloC"
-            BlueprintName = "helloC"
-            ReferencedContainer = "container:helloC.xcodeproj">
+            BlueprintName = "PipBoy 3000"
+            ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -53,8 +53,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
             BuildableName = "helloC"
-            BlueprintName = "helloC"
-            ReferencedContainer = "container:helloC.xcodeproj">
+            BlueprintName = "PipBoy 3000"
+            ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -71,8 +71,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
             BuildableName = "helloC"
-            BlueprintName = "helloC"
-            ReferencedContainer = "container:helloC.xcodeproj">
+            BlueprintName = "PipBoy 3000"
+            ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
