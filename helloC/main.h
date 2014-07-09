@@ -36,7 +36,8 @@
 #define A 2 //A alpha
 
 
-
+#define COLOR_ORANGE 0.08
+#define COLOR_GREEN 0.41
 
 typedef unsigned char byte;
 //typedef char[] string;

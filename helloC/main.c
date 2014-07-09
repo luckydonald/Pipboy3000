@@ -110,6 +110,9 @@
     //Fonts
 
 #include "font_monofont_12.h"
+#include "font_monofont_14.h"
+#include "font_monofont_16.h"
+#include "font_monofont_16_b.h"
 #include "font_monofont_18.h"
 #include "font_monofont_24.h"
 
@@ -147,12 +150,12 @@ struct pos {
 
 
 //byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
-double colorHue = 0.08; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
+double colorHue = 0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
 void writeToFile(const char* name, double* hslColors, double colorHue);
-void insertAt(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono);
+void insertAt(double* canvas, int canvas_x, int canvas_y, struct image_mono* image_mono);
 double convertHueToRGB(double var1, double var2, double d);
 struct RGBColor convertHSLtoRGB(struct HSLColor color);
 struct HSLColor convertRGBtoHSL(struct RGBColor color);
@@ -164,19 +167,21 @@ double min(double a, double b);
 struct HSLColor newHSL(double h, double s, double l);
 struct RGBColor newRGB(double r, double g, double b);
 struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y);
-void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height);
-void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height, byte where);
-int type_string(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct font* fontfile, char *StringOfCharacters, int spacing) ;
-int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, int x_pos, struct font* fontfile, unsigned char character);
-void drawScreen(double* canvas, byte screen);
-
+void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int width, int height);
+void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int height, byte where);
+int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfile, char *StringOfCharacters, int spacing) ;
+int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font* fontfile, unsigned char character);
+void drawScreen(double* canvas, byte screen, byte subscreen, byte subsubscreen);
+void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int heigth);
 
 struct image_mono bg_resized_image_mono;
 struct image_mono pipstats_image_mono;
 struct font font_monofont_12;
+struct font font_monofont_14;
+struct font font_monofont_16;
+struct font font_monofont_16_b;
 struct font font_monofont_18;
 struct font font_monofont_24;
-
 
 // Ende der Auflistung.
 
@@ -194,7 +199,7 @@ int main() //int argc, const char * argv[] //hauptteil
     struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
     struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
     struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
-    printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
+    //printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
     
     //Start der Objekt-Fälschungen
     bg_resized_image_mono.has_alpha = BG_RESIZED_IMAGE_MONO_HAS_ALPHA;
@@ -212,7 +217,25 @@ int main() //int argc, const char * argv[] //hauptteil
     font_monofont_12.index = font_monofont_12_index;
     font_monofont_12.info = font_monofont_12_info;
     font_monofont_12.data = font_monofont_12_data;
-
+    
+    font_monofont_14.first_char = FONT_MONOFONT_14_FIRST_CHAR;
+    font_monofont_14.last_char = FONT_MONOFONT_14_LAST_CHAR;
+    font_monofont_14.index = font_monofont_14_index;
+    font_monofont_14.info = font_monofont_14_info;
+    font_monofont_14.data = font_monofont_14_data;
+    
+    font_monofont_16.first_char = FONT_MONOFONT_16_FIRST_CHAR;
+    font_monofont_16.last_char = FONT_MONOFONT_16_LAST_CHAR;
+    font_monofont_16.index = font_monofont_16_index;
+    font_monofont_16.info = font_monofont_16_info;
+    font_monofont_16.data = font_monofont_16_data;
+    
+    font_monofont_16_b.first_char = FONT_MONOFONT_16_B_FIRST_CHAR;
+    font_monofont_16_b.last_char = FONT_MONOFONT_16_B_LAST_CHAR;
+    font_monofont_16_b.index = font_monofont_16_b_index;
+    font_monofont_16_b.info = font_monofont_16_b_info;
+    font_monofont_16_b.data = font_monofont_16_b_data;
+    
     font_monofont_18.first_char = FONT_MONOFONT_18_FIRST_CHAR;
     font_monofont_18.last_char = FONT_MONOFONT_18_LAST_CHAR;
     font_monofont_18.index = font_monofont_18_index;
@@ -224,19 +247,20 @@ int main() //int argc, const char * argv[] //hauptteil
     font_monofont_24.index = font_monofont_24_index;
     font_monofont_24.info = font_monofont_24_info;
     font_monofont_24.data = font_monofont_24_data;
-    
+
+
     //Ende der Objekt-Fälschungen
     
     //Image Checks
-insertAt(hslOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
+insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
 
     
-    drawScreen(hslOutputArray, SCREEN_STAT);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
     //checks
     
     //Normal Line Checks
     
-    //void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height);
+    //void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int width, int height);
     /*drawNormalLine(hslOutputArray, 10, 10, DIM_X, DIM_Y, 50, 2);
     drawNormalLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65, 2);
     drawNormalLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80, 2);
@@ -332,14 +356,14 @@ insertAt(hslOutputArray,  0,  0, DIM_X, DIM_Y, & bg_resized_image_mono);
  *
  *  Depricated: image_ type  Typ des Bildes (1 = y | 2 = y,a | 3 = r,g,b | 4 = r,g,b,a)
  */
-void insertAt(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct image_mono* image_mono){
+void insertAt(double* canvas, int canvas_x, int canvas_y, struct image_mono* image_mono){
     
     byte* image = image_mono->data;
     int image_w = image_mono->width;
     int image_h = image_mono->height;
     boolean has_alpha = image_mono->has_alpha;
-    for (int y = canvas_y; ( y < canvas_h ) && ( y - canvas_y < image_h) ; y++) {
-        for (int x = canvas_x; ( x < canvas_w ) && ( x - canvas_x < image_w) ; x++) {
+    for (int y = canvas_y; ( y < DIM_Y ) && ( y - canvas_y < image_h) ; y++) {
+        for (int x = canvas_x; ( x < DIM_X ) && ( x - canvas_x < image_w) ; x++) {
             int canvas_pos = XY_POS(x, y);
             int image_pos = ((y-canvas_y) * image_w * (has_alpha?3:2)) + (x-canvas_x) * (has_alpha?3:2);
             double alpha = 0;
@@ -561,15 +585,15 @@ struct pos calculateCenter(int canvas_x, int canvas_y, int image_x, int image_y)
     result.y = (canvas_y / 2) - (image_y / 2);
     return result;
 }
-void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height){
+void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int width, int height){
     //calc
     struct HSLColor color;
     color.h = colorHue;
     color.s = 1;//223/255;
     color.l = 127.0/255.0;//56/255;
     //printf("Drawing Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
-    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_w; x++) {
-        for (int y = canvas_y; y < canvas_y + height &&  y < canvas_h; y++) {
+    for (int x = canvas_x; x < canvas_x + width &&  x < DIM_X; x++) {
+        for (int y = canvas_y; y < canvas_y + height &&  y < DIM_Y; y++) {
             int canvas_pos = XY_POS(x, y);
             canvas[canvas_pos + S] = color.s;
             canvas[canvas_pos + L] = color.l;
@@ -577,8 +601,7 @@ void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, in
         }
     }
 }
-
-void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h,int width, int height, byte where){
+void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int height, byte where){
     //cal
     struct HSLColor color;
     color.h = colorHue;
@@ -586,12 +609,12 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int
     color.l = 0.5; //127.0/255.0;
                    //printf("Drawing Faded Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
                    //printf("Output: (where: %d, LEFT: %d, TOP: %d, RIGHT: %d, BOTTOM: %d, isLEFT: %s, isTOP: %s, isRIGHT: %s, isBOTTOM: %s)\n\n", where, LEFT, TOP, RIGHT, BOTTOM, (where & LEFT ? "true":"false"),(where & TOP ? "true":"false"),(where & RIGHT ? "true":"false"),(where & BOTTOM ? "true":"false"));
-    //for (int y = canvas_y; ( y < canvas_h ) && ( y - canvas_y < image_h) ; y++) {
-
-    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + canvas_w; x++) { //TODO: < oder <= ?
-        for (int y = canvas_y; y < canvas_y + height &&  y < canvas_y + canvas_h; y++) { //TODO: < oder <= ?
+    //for (int y = canvas_y; ( y < DIM_Y ) && ( y - canvas_y < image_h) ; y++) {
+    for (int x = canvas_x; x < canvas_x + width &&  x < DIM_X; x++) { //TODO: < oder <= ?
+        for (int y = canvas_y; y < canvas_y + height &&  y < DIM_Y; y++) { //TODO: < oder <= ?
             int canvas_pos = XY_POS(x, y);
-            canvas[canvas_pos + S] = color.s;
+            //printf("x: %d y: %d pos: %d\n", x,y,canvas_pos);
+            //canvas[canvas_pos + S] = color.s;
             double alphaX  = 1;//bla
             if((where & LEFT) && (x - canvas_x < 16)){
                 alphaX  =  min(alphaX, ((x - canvas_x) * 0.0625)); // 1/8 = 0.125 alpha per px
@@ -626,12 +649,12 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int canvas_w, int
  *
  */
 
-int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, int x_pos, struct font* fontfile, unsigned char character){
+int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font* fontfile, unsigned char character){
     if(character > fontfile->last_char) {
-        printf("Error: Out of range!\n");
+        printf("Error: (type_char)  Out of range!\n");
         return 0;
     }
-    printf("Running.\n");
+    //printf("Running.\n");
     int charOffset = character - fontfile->first_char;
     struct charInfo char_i;
     char_i.offset = fontfile->index[charOffset];
@@ -641,8 +664,8 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canv
     char_i.length = fontfile->info[(charOffset*CHAR_ENUM) + CHAR_LENGTH];
     long pos = -1;
     canvas_x = canvas_x + x_pos;
-    printf("Still Running.\n");
-    printf("Output char %d [%c] with offset %d. This is #%d\n", character,character, x_pos, charOffset);
+    //printf("Still Running.\n");
+    //printf("Output char %d [%c] with offset %d. This is #%d\n", character,character, x_pos, charOffset);
     x_pos = x_pos + char_i.width; //after everything important
     for (int y = 0; y < char_i.height; y++) {
         for (int x = 0; x < char_i.width; x++) {
@@ -651,11 +674,11 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canv
             pos = ((x) + (y * char_i.width));
 
             //check canvas out of bounds
-            if(curr_x > canvas_w){
+            if(curr_x > DIM_X){
                 //printf("[%c] Out Of Range (X)... (([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
 
                 continue;
-            }else if (curr_y > canvas_h){
+            }else if (curr_y > DIM_Y){
                 // printf("[%c] Out Of Range (Y)... (([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
                 continue;
             }else if(pos < char_i.start){ //check if we can start? else keep moving untill we reached the right pixel where to start.
@@ -693,27 +716,96 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canv
 
     return x_pos;
 }
-int type_string(double* canvas, int canvas_x, int canvas_y, int canvas_w, int canvas_h, struct font* fontfile, char *StringOfCharacters, int spacing) {
+int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfile, char *StringOfCharacters, int spacing) {
     int i = 0;
     while(*StringOfCharacters > 0)
     {
-        i = type_char(canvas, canvas_x, canvas_y, canvas_w, canvas_h, i, fontfile, *StringOfCharacters++);
+        i = type_char(canvas, canvas_x, canvas_y, i, fontfile, *StringOfCharacters++);
         i += spacing;
     }
     return i;
 }
-void drawScreen(double* canvas, byte screen){
+void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int height){
+    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
+        for (int y = canvas_y; y < canvas_y + height &&  y < canvas_y + DIM_Y; y++) { //TODO: < oder <= ?
+            int canvas_pos = XY_POS(x, y);
+            if (x == canvas_x || x == canvas_x + width - 1 || y == canvas_y || y == canvas_y + height - 1) {
+                canvas[canvas_pos + S] = 1;
+                canvas[canvas_pos + L] = 0.5;
+            } else {
+                canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, 0.3);  //alpha needed, befause of background
+                canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, 0.3);
+            }
+        }
+    }
+}
+void drawScreen(double* canvas, byte screen, byte tab, byte part){
     if (screen & SCREEN_STAT) {
-        //int textend =   printf("\nEnde: %d\n\n", 30 + textend);
-        drawNormalLine(canvas, 10, 10, DIM_X, DIM_Y,  10, 1);//top line, part one
-        type_string(canvas, 27, 1,  DIM_X, DIM_Y, & font_monofont_18, "STATS", 2);
-        drawNormalLine(canvas, 77 , 10, DIM_X, DIM_Y,  273, 1);
-        drawFadedLine(canvas, 10, 10, DIM_X, DIM_Y,  1, 20, BOTTOM);
-        drawFadedLine(canvas, 350, 10, DIM_X, DIM_Y,  1, 20, BOTTOM);
-        type_string(canvas, 100, 215,  DIM_X, DIM_Y, & font_monofont_18, "LittlePip - Level 20", 2);
+        ///int textend =   printf("#######################\nEnde: %d\n#######################\n", 30 + textend);
+
+        
+        // TOP LINE
+        drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
+        drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
+        type_string(canvas, 27, 1, & font_monofont_18, "STATS", 2); //  STATS text in topline
+        drawNormalLine(canvas, 77 , 10, 273, 1); // - - - - - - - - - - top line, part 2
+        drawFadedLine(canvas, 350, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+        // SIDE TABS
+        if(tab & MODE_STATUS_CND) {
+            drawBox(canvas, 5, 32,  35, 20);
+        } else if(tab & MODE_STATUS_RAD) {
+            drawBox(canvas, 5, 52,  35, 20);
+        } else {
+            drawBox(canvas, 5, 72,  35, 20);
+        }
+        type_string(canvas, 14, 34, & font_monofont_16, "ZST", 0);
+        type_string(canvas, 14, 54, & font_monofont_16, "RAD", 0);
+        type_string(canvas, 14, 74, & font_monofont_16, "EFF", 0);
+        // MAIN STUFF
+        if(tab & MODE_STATUS_CND) {
+            insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
+            type_string(canvas, 100, 200, & font_monofont_16_b, "LittlePip - Level 20", 0);
+        }
+        
+        
+        // BOTTOM LINE
+        int textend; //TODO REMOVE!
+        drawFadedLine(canvas, 10, DIM_Y - 28,  1, 18, TOP); // - - - - - - - top line, faded part, left side
+        int o = 162 - 156; //offset
+        drawNormalLine(canvas, 10, DIM_Y - 10, 10, 1); // - - - - - - - - - - - top line, part one
+        drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - STATUS
+        drawNormalLine(canvas, 69 , DIM_Y - 10, 5, 1); // - - - - - - - - - - top line, part 2
+        drawBox(canvas, 74, DIM_Y - 21,  70, 20);  // - - - SPECIAL
+        drawNormalLine(canvas, 144 , DIM_Y - 10, 11, 1); // - - - - - - - - - - top line, part 2
+        drawBox(canvas, 155, DIM_Y - 21,  50, 20); // - - - Skills
+        
+        drawFadedLine(canvas, 350, DIM_Y - 28, 1, 18, TOP); // - - - - - - - top line, faded part, right side
+
+                            //(68 * 0) + 44
+        drawFadedLine(canvas,  44, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
+        drawFadedLine(canvas, 112, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
+        drawFadedLine(canvas, 180, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
+        drawFadedLine(canvas, 248, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
+        drawFadedLine(canvas, 316, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
+
+        type_string(canvas, 27,  DIM_Y - 19, & font_monofont_16, "Status", 0); //  STATS text in topline //+7 to box
+        
+        drawNormalLine(canvas, 69 , DIM_Y - 10, 5, 1); // - - - - - - - - - - top line, part 2
+        textend = type_string(canvas, 81,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2); // 84 px wide.  pos x = (84/2) + 112; ((84-30)/2) +44
+        textend = type_string(canvas, 162,  DIM_Y - 19, & font_monofont_16, "Skills", 0); // 84 px wide.  pos x = (84/2) + 112; ((84-30)/2) +44
+
+        //int textend =
+        printf("#######################\nLength: %d\n#######################\n", textend);
+
+        
+    } else if (screen & SCREEN_GGST) {
+        
     }
 
 }
+
+
+
 
 
 
