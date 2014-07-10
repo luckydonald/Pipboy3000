@@ -119,6 +119,7 @@
 #include "font_monofont_16.h"
 #include "font_monofont_16_b.h"
 #include "font_monofont_18.h"
+#include "font_monofont_20.h"
 #include "font_monofont_24.h"
 
 
@@ -153,10 +154,12 @@ struct pos {
     int y;
 };
 
-
-//byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
+//global definitions
 double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
+boolean debug = true;
+
+
 
 // Funktionen die später kommen.
 void writeToFile(const char* name, double* hslColors, double colorHue);
@@ -178,6 +181,7 @@ int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfil
 int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font* fontfile, unsigned char character);
 void drawScreen(double* canvas, byte screen, byte subscreen, byte subsubscreen);
 void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int heigth);
+void displayHelp();
 
 struct image pip_image;
 struct image bg_image;
@@ -189,6 +193,7 @@ struct font font_monofont_14;
 struct font font_monofont_16;
 struct font font_monofont_16_b;
 struct font font_monofont_18;
+struct font font_monofont_20;
 struct font font_monofont_24;
 
 // Ende der Auflistung.
@@ -204,20 +209,6 @@ int main() //int argc, const char * argv[] //hauptteil
 {
     //byte rgbOutputArray[DIM_X * DIM_Y * 3]; //RGB color Array
 	double *hslOutputArray = malloc(sizeof(double) * DIM_X * DIM_Y * 2); //HSL color Array, only S and L.
-    //struct HSLColor tmpColorOriginal = newHSL(colorHue, 1.0, 0.1);
-    //struct RGBColor tmpColor = convertHSLtoRGB(tmpColorOriginal);
-    //struct HSLColor tmpColorTest = convertRGBtoHSL(tmpColor);
-    //printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
-    
-    //Start der Objekt-Fälschungen
-    
-    /*
-    // Kept for life bar reference
-    pipstats_image.has_alpha = PIPSTATS_image_HAS_ALPHA;
-    pipstats_image.height = PIPSTATS_image_HEIGHT;
-    pipstats_image.width = PIPSTATS_image_WIDTH;
-    pipstats_image.data = pipstats_image_data;
-     */
     
     bg_image.has_alpha = BG_IMAGE_HAS_ALPHA;
     bg_image.height = BG_IMAGE_HEIGHT;
@@ -260,23 +251,108 @@ int main() //int argc, const char * argv[] //hauptteil
     font_monofont_18.info = font_monofont_18_info;
     font_monofont_18.data = font_monofont_18_data;
     
+    font_monofont_20.first_char = FONT_MONOFONT_20_FIRST_CHAR;
+    font_monofont_20.last_char = FONT_MONOFONT_20_LAST_CHAR;
+    font_monofont_20.index = font_monofont_20_index;
+    font_monofont_20.info = font_monofont_20_info;
+    font_monofont_20.data = font_monofont_20_data;
+    
     font_monofont_24.first_char = FONT_MONOFONT_24_FIRST_CHAR;
     font_monofont_24.last_char = FONT_MONOFONT_24_LAST_CHAR;
     font_monofont_24.index = font_monofont_24_index;
     font_monofont_24.info = font_monofont_24_info;
     font_monofont_24.data = font_monofont_24_data;
-
-
     //Ende der Objekt-Fälschungen
     
-    //Image Checks
     
-    //insertAt(hslOutputArray,  0,  0, & bg_resized_image);
-    //insertAt(hslOutputArray,  0,  0, & pip_image);
+    boolean quit = false;
+    byte screen = 0x00;
+    byte tab = 0x00;
+    byte mode = 0x00;
+    if(debug){
+        screen = SCREEN_GGST; //debug
+        drawScreen(hslOutputArray, screen,tab, mode);
+        writeToFile("output.ppm", hslOutputArray, colorHue);
+    }
+    displayHelp();
+    char c;
+    do {
+        printf("\n>");
+        do { //Skip Whitespaces.
+            c = getchar();
+        } while (isspace(c)); //FIXME: Implicit declaration of function 'isspace' is invalid in C99
+        switch (c) {
+            case 'a':
+                screen=SCREEN_STAT;
+                break;
+            case 'b':
+                screen=SCREEN_GGST;
+                break;
+            case 'c':
+                screen=SCREEN_DATEN;
+                break;
+            case '1':
+                tab = 0x01;
+                break;
+            case '2':
+                tab = 0x02;
+                break;
+            case '3':
+                tab = 0x04;
+                break;
+            case '4':
+                tab = 0x08;
+                break;
+            case '5':
+                tab = 0x10; //16
+                break;
+            case '+':
+                mode++;
+                break;
+            case '-':
+                if (mode > 0) {
+                    mode--;
+                }
+                break;
+            case 'q':
+                quit = true;
+                continue;
+                break;
+            case 'h':
+                displayHelp();
+                break;
+            case '0':
+                colorHue = COLOR_ORANGE;
+                break;
+            case '9':
+                colorHue = COLOR_GREEN;
+                break;
+            case '8':
+                colorHue = COLOR_BLUE;
+                break;
+            default:
+                printf("Input not recognized: %c\n", c);
+                continue;
+                break;
+        }
+        printf("Switching Screen (%c): %d,%d, %d\n", c, screen, tab, mode);
+        drawScreen(hslOutputArray, screen,tab, mode);
+        writeToFile("output.ppm", hslOutputArray, colorHue);
+    } while(!quit);
     
+    /*
     drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS, MODE_STATUS_CND);
-    //drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
-    writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
+    writeToFile("output_1.ppm", hslOutputArray, colorHue);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
+    writeToFile("output_2.ppm", hslOutputArray, colorHue);
+    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_SKILLS, 0);
+    writeToFile("output_3.ppm", hslOutputArray, colorHue);
+    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_PERKS, 0);
+    writeToFile("output_4.ppm", hslOutputArray, colorHue);
+    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_GENERAL, 0);
+    writeToFile("output_5.ppm", hslOutputArray, colorHue);
+     */
+    
 
     /*
     insertAt(hslOutputArray,  0,  0, & bg_resized_image);
@@ -371,7 +447,7 @@ int main() //int argc, const char * argv[] //hauptteil
 
     //Faded Line Checks
     //drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 50, 50, LEFT);
-    
+    printf("Shutting Down.\n");
 	free(hslOutputArray);
 
     return 0;
@@ -440,7 +516,7 @@ double doMathMagic(double canvas, double image, double alpha){
 
 void writeToFile(const char* name, double* hslColors, double colorHue) {
     
-    printf("Starting image output to \"%s\".\n", name);
+    //printf("Starting image output to \"%s\".\n", name);
     FILE *fp = fopen(name, "wb"); /* b - binary mode */
     fprintf(fp, "P6\n%d %d\n255\n", DIM_X, DIM_Y);
     for (int y = 0; y < DIM_Y; y++)
@@ -462,7 +538,7 @@ void writeToFile(const char* name, double* hslColors, double colorHue) {
         }
     }
     fclose(fp);
-    printf("Successfully printed image to \"%s\".\n", name);
+    //printf("Successfully printed image to \"%s\".\n", name);
 }
 
 
@@ -860,38 +936,37 @@ void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte a
         }
     }
 }
-void drawScreen(double* canvas, byte screen, byte tab, byte part){
+void drawScreen(double* canvas, byte screen, byte tab, byte mode){
     int textend = 0; //Debug //TODO remove.
     insertAt(canvas,  0,  0, & bg_image);
     if (screen & SCREEN_STAT) {
-        ///int textend =   printf("#######################\nEnde: %d\n#######################\n", 30 + textend);
-
-        
         // TOP LINE
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
-        type_string(canvas, 27, 1, & font_monofont_18, "STATS", 2); //  STATS text in topline
-        drawNormalLine(canvas, 77 , 10, DIM_X - 1 - 5 - 77, 1); // - - - - - - - - - - top line, part 2
+        textend = type_string(canvas, 27, 1, & font_monofont_20, "STATS", 2); //  STATS text in topline //w: 50
+        drawNormalLine(canvas, 84 , 10, DIM_X - 1 - 5 - 84, 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
         if (tab & TAB_STAT_STATUS) {
         // SIDE TABS
-            if(tab & MODE_STATUS_CND) {
+            if(mode == MODE_STATUS_CND) {
                 drawBox(canvas, 5, 32,  35, 20);
-            } else if(tab & MODE_STATUS_RAD) {
+            } else if(mode == MODE_STATUS_RAD) {
                 drawBox(canvas, 5, 52,  35, 20);
-            } else {
+            } else if (mode == MODE_STATUS_EFF){
                 drawBox(canvas, 5, 72,  35, 20);
+            } else {
+                die("Unknown MODE.");
             }
             type_string(canvas, 14, 34, & font_monofont_16, "CND", 0);
             type_string(canvas, 14, 54, & font_monofont_16, "RAD", 0);
             type_string(canvas, 14, 74, & font_monofont_16, "EFF", 0);
             // MAIN STUFF
-            if(tab & MODE_STATUS_CND) {
+            if(mode == MODE_STATUS_CND) {
                 //insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
                 insertAt(canvas,  146,  30, & pip_image); // - - - - - fallout boy / littlepip
                 //x: (480/2)-(187/2) = 146,5
                 //y: (272/2)-(180/2) = 46
-                textend = type_string(canvas, 170, 226, & font_monofont_16_b, "LittlePip - Level 20", 0);
+                type_string(canvas, 170, 226, & font_monofont_16_b, "LittlePip - Level 20", 0);
                 //x: (480/2)-(140/2) = 170
                 //y: (272/2)+(180/2) +20 = 246
                 drawLifeBar(canvas,  70,  70, 90, RIGHT); //Head
@@ -902,18 +977,18 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
                 drawLifeBar(canvas, 330, 190, 40, LEFT);  //Leg 4
                                                           //TODO: make clear which legs is which.
             }
-            drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - Status
+            drawBox(canvas, 30-7, DIM_Y - 21,  49, 20);  // - - - Status
         } else if (tab & TAB_STAT_SPECIAL) {
-            drawBox(canvas, 74, DIM_Y - 21,  70, 20);  // - - - S.P.E.C.I.A.L.
+            drawBox(canvas, 116-7, DIM_Y - 21,  70, 20);  // - - - S.P.E.C.I.A.L.
             drawLifeBar(canvas, 20, 20, 50, LEFT);
             drawLifeBar(canvas, 20, 40, 50, NONE);
             drawLifeBar(canvas, 20, 60, 50, RIGHT);
         } else if (tab & TAB_STAT_SKILLS) {
-            drawBox(canvas, 155, DIM_Y - 21,  50, 20); // - - - Skills
+            drawBox(canvas, 222-7, DIM_Y - 21,  50, 20); // - - - Skills
         } else if (tab & TAB_STAT_PERKS) {
-            drawBox(canvas, 223, DIM_Y - 21,  44, 20); // - - - Perks
+            drawBox(canvas, 321-7, DIM_Y - 21,  44, 20); // - - - Perks
         } else if (tab & TAB_STAT_GENERAL) { //TAB_STAT_GENERAL
-            drawBox(canvas,  DIM_X - 20 - 42 - 7 - 7, DIM_Y - 21,  56, 20); // - - - General
+            drawBox(canvas, 411-7, DIM_Y - 21,  56, 20); // - - - General
 
         } else {
             die("Unknown STATS tab.");
@@ -921,28 +996,35 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         
         // BOTTOM LINE, all need that.
         drawFadedLine(canvas, 10, DIM_Y - 27,  1, 18, TOP); // - - - - - - - top line, faded part, left side
-        drawNormalLine(canvas, 10, DIM_Y - 10, 10, 1); // - - - - - - - - - - - top line, part one
-        type_string(canvas, 27,  DIM_Y - 19, & font_monofont_16, "Status", 0);
-        drawNormalLine(canvas, 69 , DIM_Y - 10, 5, 1); // - - - - - - - - - - top line, part 2
-        type_string(canvas, 81,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2);
-        drawNormalLine(canvas, 144 , DIM_Y - 10, 11, 1); // - - - - - - - - - - top line, part 2
-        type_string(canvas, 162,  DIM_Y - 19, & font_monofont_16, "Skills", 0);
-        drawNormalLine(canvas, 205 , DIM_Y - 10, 19, 1); // - - - - - - - - - - top line, part 2
-        type_string(canvas, 230  ,  DIM_Y - 19, & font_monofont_16, "Perks", 0);
-        drawNormalLine(canvas, 267 , DIM_Y - 10, 18, 1); // - - - - - - - - - - top line, part 2
-        type_string(canvas, DIM_X- 1 - 20 - 42 - 7 ,  DIM_Y - 19, & font_monofont_16, "General", 0);
-        drawNormalLine(canvas, 340 , DIM_Y - 10, 10, 1); // - - - - - - - - - - top line, part 2
-
+        drawNormalLine(canvas, 10, DIM_Y - 10, 13, 1); // - - - - - - - - - - - top line, part one
+        type_string(canvas, 30,  DIM_Y - 19, & font_monofont_16, "Status", 0); //width: 36px
+            //x: 48 + (96 * 0) - (36 / 2)
+        drawNormalLine(canvas, 72 , DIM_Y - 10, 37, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 116,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2); //width: 56px
+            //x: 48 + (96 * 1) - (56/ 2)
+        drawNormalLine(canvas, 179 , DIM_Y - 10, 36, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 222,  DIM_Y - 19, & font_monofont_16, "Skills", 0); //width: 36px
+            //x: 48 + (96 * 2) - (36 / 2)
+        drawNormalLine(canvas, 265 , DIM_Y - 10, 49, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 321,  DIM_Y - 19, & font_monofont_16, "Perks", 0); //width: 30px
+            //x: 48 + (96 * 3) - (30 / 2)
+        drawNormalLine(canvas, 358 , DIM_Y - 10, 46, 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 411 ,  DIM_Y - 19, & font_monofont_16, "General", 0); //width: 42px
+            //x: 48 + (96 * 4) - (42 / 2)
+        drawNormalLine(canvas, 460 , DIM_Y - 10, 14, 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, DIM_X - 1 - 5, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
 
                             //(68 * 0) + 44
         
          // Tab Marker
+        /*
+        // To mark the center of the tabs.
         drawFadedLine(canvas, 48 + (96 * 0), DIM_Y - 28,  1, 18, TOP + BOTTOM);
         drawFadedLine(canvas, 48 + (96 * 1), DIM_Y - 28,  1, 18, TOP + BOTTOM);
         drawFadedLine(canvas, 48 + (96 * 2), DIM_Y - 28,  1, 18, TOP + BOTTOM);
         drawFadedLine(canvas, 48 + (96 * 3), DIM_Y - 28,  1, 18, TOP + BOTTOM);
         drawFadedLine(canvas, 48 + (96 * 4), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        */
         
         
 
@@ -951,7 +1033,11 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         //
         
     } else if (screen & SCREEN_GGST) {
-        
+        drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
+        drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
+        textend = type_string(canvas, 27, 1, & font_monofont_20, "ITEMS", 2); //  STATS text in topline
+        drawNormalLine(canvas, 27 + 50 + 7 , 10, DIM_X - 1 - 5 - (27 + 50 + 7), 1); // - - - - - - - - - - top line, part 2
+        drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
     } else if (screen & SCREEN_DATEN){
         
     }
@@ -960,8 +1046,21 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
 
 }
 
+void displayHelp(){
+    printf("You can enter multible buttons at a time, they will be executed one by one.\n");
+    printf("Enter chars to simulate hardware input:\n");
+    printf("h:   Display Help.\n");
+    printf("q:   Quit.\n");
+    printf("a:   STATS button.\n");
+    printf("b:   ITEMS button.\n");
+    printf("c:   DATA  button.\n");
+    printf("1-5: Select Tabs.\n");
+    printf("+:   Scroll up.\n");
+    printf("-:   Scroll down.\n");
+    printf("8-0: Change colors.\n");
+    printf("The output will be written to the image file \"output.ppm\".\n");
 
-
+}
 
 
 

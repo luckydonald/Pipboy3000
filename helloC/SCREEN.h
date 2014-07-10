@@ -18,11 +18,11 @@
 #define TAB_STAT_SPECIAL      0x02   //1*2
 #define TAB_STAT_SKILLS       0x04   //1*3
 #define TAB_STAT_PERKS        0x08   //1*4
-#define TAB_STAT_GENERAL      0x10   //1*5
+#define TAB_STAT_GENERAL      0x10   //= 16 //1*5
 
 #define MODE_STATUS_CND       0x01   //1*5*1
 #define MODE_STATUS_RAD       0x02   //1*5*2
-#define MODE_STATUS_EFF       0x04
+#define MODE_STATUS_EFF       0x03
 
 
 

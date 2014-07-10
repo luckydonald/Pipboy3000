@@ -26,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		853980F91969A706003DCC72 /* font_monofont_16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_16.h; sourceTree = "<group>"; };
+		853E599A196EF24800E2DD12 /* font_monofont_20.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_20.h; sourceTree = "<group>"; };
 		85598D761965A250000D214C /* font_a.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_a.h; sourceTree = "<group>"; };
 		85598D781966A222000D214C /* FONT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FONT.h; sourceTree = "<group>"; };
 		85598D791966A263000D214C /* LINE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LINE.h; sourceTree = "<group>"; };
@@ -78,10 +79,11 @@
 				858CD9AC196E773600F2BEEC /* image_pip.h */,
 				856302AD196D4B5A00410E88 /* font_monofont_16_b.h */,
 				85598D7B196750E9000D214C /* font_monofont_12.h */,
-				85598D7C196750E9000D214C /* font_monofont_24.h */,
 				856302AE196D536D00410E88 /* font_monofont_14.h */,
-				85598D7D19675946000D214C /* font_monofont_18.h */,
 				853980F91969A706003DCC72 /* font_monofont_16.h */,
+				85598D7D19675946000D214C /* font_monofont_18.h */,
+				853E599A196EF24800E2DD12 /* font_monofont_20.h */,
+				85598D7C196750E9000D214C /* font_monofont_24.h */,
 				859EE70C1947819D00600C51 /* main.c */,
 				859EE70E1947819D00600C51 /* helloC.1 */,
 				85598D791966A263000D214C /* LINE.h */,
