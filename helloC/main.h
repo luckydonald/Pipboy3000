@@ -18,8 +18,8 @@
   //=========
  // Image Size
 //
-#define DIM_X 480 //360
-#define DIM_Y 272 //240
+#define DIM_X 480 //Old Value: 360
+#define DIM_Y 272 //Old Value: 240
 
   //========
  // RGB
@@ -38,6 +38,7 @@
 
 #define COLOR_ORANGE 0.08
 #define COLOR_GREEN 0.41
+#define COLOR_BLUE 0.57
 
 typedef unsigned char byte;
 //typedef char[] string;

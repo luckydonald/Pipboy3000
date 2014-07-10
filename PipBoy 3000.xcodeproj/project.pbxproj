@@ -35,8 +35,8 @@
 		85598D7E196857F3000D214C /* SCREEN.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SCREEN.h; sourceTree = "<group>"; };
 		856302AD196D4B5A00410E88 /* font_monofont_16_b.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_16_b.h; sourceTree = "<group>"; };
 		856302AE196D536D00410E88 /* font_monofont_14.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_14.h; sourceTree = "<group>"; };
-		85700E07194DD63E00164A32 /* bg_resized_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bg_resized_image_mono.h; sourceTree = "<group>"; };
-		85700E08194DD63E00164A32 /* pipstats_image_mono.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pipstats_image_mono.h; sourceTree = "<group>"; };
+		858CD9AB196E773600F2BEEC /* image_bg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_bg.h; sourceTree = "<group>"; };
+		858CD9AC196E773600F2BEEC /* image_pip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_pip.h; sourceTree = "<group>"; };
 		859EE7091947819D00600C51 /* PipBoy 3000 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PipBoy 3000"; sourceTree = BUILT_PRODUCTS_DIR; };
 		859EE70C1947819D00600C51 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		859EE70E1947819D00600C51 /* helloC.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = helloC.1; sourceTree = "<group>"; };
@@ -74,9 +74,9 @@
 			isa = PBXGroup;
 			children = (
 				85FDE664194F146B00D7D7EC /* main.h */,
-				85700E07194DD63E00164A32 /* bg_resized_image_mono.h */,
+				858CD9AB196E773600F2BEEC /* image_bg.h */,
+				858CD9AC196E773600F2BEEC /* image_pip.h */,
 				856302AD196D4B5A00410E88 /* font_monofont_16_b.h */,
-				85700E08194DD63E00164A32 /* pipstats_image_mono.h */,
 				85598D7B196750E9000D214C /* font_monofont_12.h */,
 				85598D7C196750E9000D214C /* font_monofont_24.h */,
 				856302AE196D536D00410E88 /* font_monofont_14.h */,

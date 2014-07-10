@@ -92,7 +92,9 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <stdio.h>
+#include <stdio.h> //using printf()
+#include <stdlib.h> //using malloc()
+
 #include "main.h"
 
 
@@ -104,12 +106,13 @@
 
 //Images
 
-#include "bg_resized_image_mono.h"
-#include "pipstats_image_mono.h"
-    //#include "test_image_mono.h"
-    //#include "img_image_mono.h"
-    //#include "schwarzlinie_image_mono.h"
-    //Fonts
+#include "image_bg.h"
+#include "image_pip.h"
+//#include "pipstats_image_mono.h"     // Kept for life bar reference
+
+
+
+//Fonts
 
 #include "font_monofont_12.h"
 #include "font_monofont_14.h"
@@ -139,7 +142,7 @@ struct HSLAColor {
     double l;
     double alpha; //1 = not transparent // 0 = transparent
 };
-struct image_mono {
+struct image{
     int width;
     int height;
     boolean has_alpha;
@@ -152,12 +155,12 @@ struct pos {
 
 
 //byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
-double colorHue = 0.1;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
+double colorHue = 0.57;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
 void writeToFile(const char* name, double* hslColors, double colorHue);
-void insertAt(double* canvas, int canvas_x, int canvas_y, struct image_mono* image_mono);
+void insertAt(double* canvas, int canvas_x, int canvas_y, struct image* image);
 double convertHueToRGB(double var1, double var2, double d);
 struct RGBColor convertHSLtoRGB(struct HSLColor color);
 struct HSLColor convertRGBtoHSL(struct RGBColor color);
@@ -176,8 +179,11 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font
 void drawScreen(double* canvas, byte screen, byte subscreen, byte subsubscreen);
 void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int heigth);
 
-struct image_mono bg_resized_image_mono;
-struct image_mono pipstats_image_mono;
+struct image pip_image;
+struct image bg_image;
+//struct image pipstats_image; //kept for life bar reference.
+
+
 struct font font_monofont_12;
 struct font font_monofont_14;
 struct font font_monofont_16;
@@ -204,15 +210,25 @@ int main() //int argc, const char * argv[] //hauptteil
     //printf("Color Test: (h: %f, s: %f, l: %f) => (r: %d, g: %d, b: %d) => (h: %f, s: %f, l: %f)\n\n", tmpColorOriginal.h, tmpColorOriginal.s, tmpColorOriginal.l, tmpColor.r, tmpColor.g, tmpColor.b, tmpColorTest.h, tmpColorTest.s, tmpColorTest.l);
     
     //Start der Objekt-Fälschungen
-    bg_resized_image_mono.has_alpha = BG_RESIZED_IMAGE_MONO_HAS_ALPHA;
-    bg_resized_image_mono.height = BG_RESIZED_IMAGE_MONO_HEIGHT;
-    bg_resized_image_mono.width = BG_RESIZED_IMAGE_MONO_WIDTH;
-    bg_resized_image_mono.data = bg_resized_image_mono_data;
     
-    pipstats_image_mono.has_alpha = PIPSTATS_IMAGE_MONO_HAS_ALPHA;
-    pipstats_image_mono.height = PIPSTATS_IMAGE_MONO_HEIGHT;
-    pipstats_image_mono.width = PIPSTATS_IMAGE_MONO_WIDTH;
-    pipstats_image_mono.data = pipstats_image_mono_data;
+    /*
+    // Kept for life bar reference
+    pipstats_image.has_alpha = PIPSTATS_image_HAS_ALPHA;
+    pipstats_image.height = PIPSTATS_image_HEIGHT;
+    pipstats_image.width = PIPSTATS_image_WIDTH;
+    pipstats_image.data = pipstats_image_data;
+     */
+    
+    bg_image.has_alpha = BG_IMAGE_HAS_ALPHA;
+    bg_image.height = BG_IMAGE_HEIGHT;
+    bg_image.width = BG_IMAGE_WIDTH;
+    bg_image.data = bg_image_data;
+    
+    pip_image.has_alpha = PIP_IMAGE_HAS_ALPHA;
+    pip_image.height = PIP_IMAGE_HEIGHT;
+    pip_image.width = PIP_IMAGE_WIDTH;
+    pip_image.data = pip_image_data;
+    
     
     font_monofont_12.first_char = FONT_MONOFONT_12_FIRST_CHAR;
     font_monofont_12.last_char = FONT_MONOFONT_12_LAST_CHAR;
@@ -255,24 +271,25 @@ int main() //int argc, const char * argv[] //hauptteil
     
     //Image Checks
     
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    //insertAt(hslOutputArray,  0,  0, & bg_resized_image);
+    //insertAt(hslOutputArray,  0,  0, & pip_image);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL + TAB_STAT_SKILLS + TAB_STAT_SPECIAL + TAB_STAT_STATUS + TAB_STAT_PERKS,0);
     writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
 
     /*
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
     writeToFile("first_Status_CND.ppm", hslOutputArray, colorHue);
     
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
     writeToFile("first_SPECIAL.ppm", hslOutputArray, colorHue);
     
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SKILLS,0);
     writeToFile("first_Skills.ppm", hslOutputArray, colorHue);
     
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL,0);
     writeToFile("first_General.ppm", hslOutputArray, colorHue);
 */
@@ -377,24 +394,24 @@ int main() //int argc, const char * argv[] //hauptteil
  *
  *  Depricated: image_ type  Typ des Bildes (1 = y | 2 = y,a | 3 = r,g,b | 4 = r,g,b,a)
  */
-void insertAt(double* canvas, int canvas_x, int canvas_y, struct image_mono* image_mono){
+void insertAt(double* canvas, int canvas_x, int canvas_y, struct image* image){
     
-    byte* image = image_mono->data;
-    int image_w = image_mono->width;
-    int image_h = image_mono->height;
-    boolean has_alpha = image_mono->has_alpha;
+    byte* image_d = image->data;
+    int image_w = image->width;
+    int image_h = image->height;
+    boolean has_alpha = image->has_alpha;
     for (int y = canvas_y; ( y < DIM_Y ) && ( y - canvas_y < image_h) ; y++) {
         for (int x = canvas_x; ( x < DIM_X ) && ( x - canvas_x < image_w) ; x++) {
             int canvas_pos = XY_POS(x, y);
             int image_pos = ((y-canvas_y) * image_w * (has_alpha?3:2)) + (x-canvas_x) * (has_alpha?3:2);
             double alpha = 0;
             if (has_alpha){  // effizienter mit (has_alpha ? (image[image_pos + A] / 255.0) : 1) ?
-                alpha = (image[image_pos + A] / 255.0);
+                alpha = (image_d[image_pos + A] / 255.0);
             }else{
                 alpha = 1; //not transparent
             }
-            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], image[image_pos + S] / 255.0, alpha);
-            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], image[image_pos + L] / 255.0, alpha);
+            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], image_d[image_pos + S] / 255.0, alpha);
+            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], image_d[image_pos + L] / 255.0, alpha);
         }
     }
 }
@@ -764,6 +781,8 @@ void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int height)
     }
 }
 void drawScreen(double* canvas, byte screen, byte tab, byte part){
+    int textend = 0; //Debug //TODO remove.
+    insertAt(canvas,  0,  0, & bg_image);
     if (screen & SCREEN_STAT) {
         ///int textend =   printf("#######################\nEnde: %d\n#######################\n", 30 + textend);
 
@@ -788,8 +807,13 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
             type_string(canvas, 14, 74, & font_monofont_16, "EFF", 0);
             // MAIN STUFF
             if(tab & MODE_STATUS_CND) {
-                insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
-                type_string(canvas, 100, 200, & font_monofont_16_b, "LittlePip - Level 20", 0);
+                //insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
+                insertAt(canvas,  146,  30, & pip_image); // - - - - - fallout boy / littlepip
+                //x: (480/2)-(187/2) = 146,5
+                //y: (272/2)-(180/2) = 46
+                textend = type_string(canvas, 170, 226, & font_monofont_16_b, "LittlePip - Level 20", 0);
+                //x: (480/2)-(140/2) = 170
+                //y: (272/2)+(180/2) +20 = 246
             }
             drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - Status
         } else if (tab & TAB_STAT_SPECIAL) {
@@ -834,14 +858,15 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
 
 
         //int textend =
-        //printf("#######################\nLength: %d\n#######################\n", textend);
-
+        //
         
     } else if (screen & SCREEN_GGST) {
         
     } else if (screen & SCREEN_DATEN){
         
     }
+    printf("#######################\nLength: %d\n#######################\n", textend);
+
 
 }
 
