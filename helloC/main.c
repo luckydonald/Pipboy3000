@@ -158,7 +158,8 @@ struct pos {
 double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 boolean debug = true;
-
+int debug_i = 0;
+int level = 19;
 
 
 // Funktionen die später kommen.
@@ -182,6 +183,7 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font
 void drawScreen(double* canvas, byte screen, byte subscreen, byte subsubscreen);
 void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int heigth);
 void displayHelp();
+void die(char *StringOfCharacters);
 
 struct image pip_image;
 struct image bg_image;
@@ -270,7 +272,10 @@ int main() //int argc, const char * argv[] //hauptteil
     byte tab = 0x00;
     byte mode = 0x00;
     if(debug){
-        screen = SCREEN_GGST; //debug
+        screen = SCREEN_STAT; //debug
+        tab = TAB_STAT_STATUS;
+        mode = MODE_STATUS_CND;
+        colorHue = COLOR_GREEN;
         drawScreen(hslOutputArray, screen,tab, mode);
         writeToFile("output.ppm", hslOutputArray, colorHue);
     }
@@ -330,12 +335,29 @@ int main() //int argc, const char * argv[] //hauptteil
             case '8':
                 colorHue = COLOR_BLUE;
                 break;
+            case '.':
+                debug_i += 1;
+                printf("Debug_i now: %d\n", debug_i);
+                break;
+            case ',':
+                debug_i -= 1;
+                printf("Debug_i now: %d\n", debug_i);
+                break;
+            case 'l':
+                debug_i += 10;
+                printf("Debug_i now: %d\n", debug_i);
+                break;
+            case 'k':
+                debug_i -= 10;
+                printf("Debug_i now: %d\n", debug_i);
+                break;
+
             default:
                 printf("Input not recognized: %c\n", c);
                 continue;
                 break;
         }
-        printf("Switching Screen (%c): %d,%d, %d\n", c, screen, tab, mode);
+        //printf("Switching Screen (%c): %d,%d, %d\n", c, screen, tab, mode);
         drawScreen(hslOutputArray, screen,tab, mode);
         writeToFile("output.ppm", hslOutputArray, colorHue);
     } while(!quit);
@@ -768,8 +790,8 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int he
  */
 
 int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font* fontfile, unsigned char character){
-    if(character > fontfile->last_char) {
-        printf("Error: (type_char)  Out of range!\n");
+    if(character < fontfile->first_char || character > fontfile->last_char) {
+        die("Char not in font!");
         return 0;
     }
     //printf("Running.\n");
@@ -834,6 +856,68 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font
 
     return x_pos;
 }
+char nthdigit(int x, int n)
+{
+    while (n--) {
+        x /= 10;
+    }
+    return (x % 10) + '0';
+}
+// http://stackoverflow.com/questions/1489830/efficient-way-to-determine-number-of-digits-in-an-integer
+int numDigits(int x)
+{
+    //if (x == MIN_INT) return 10 + 1;
+    if (x < 0) return numDigits(-x) + 1;
+    
+    if (x >= 10000) {
+        if (x >= 10000000) {
+            if (x >= 100000000) {
+                if (x >= 1000000000)
+                    return 10;
+                return 9;
+            }
+            return 8;
+        }
+        if (x >= 100000) {
+            if (x >= 1000000)
+                return 7;
+            return 6;
+        }
+        return 5;
+    }
+    if (x >= 100) {
+        if (x >= 1000)
+            return 4;
+        return 3;
+    }
+    if (x >= 10)
+        return 2;
+    return 1;
+}
+/* http://www.strudel.org.uk/itoa/ */
+char* itoa(int value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 36) { *result = '\0'; return result; }
+    
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+    
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+    
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
 int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfile, char *StringOfCharacters, int spacing) {
     int i = 0;
     while(*StringOfCharacters > 0)
@@ -841,8 +925,26 @@ int type_string(double* canvas, int canvas_x, int canvas_y, struct font* fontfil
         i = type_char(canvas, canvas_x, canvas_y, i, fontfile, *StringOfCharacters++);
         i += spacing;
     }
-    return i;
+    return i - spacing;
 }
+int calc_char(struct font* fontfile, unsigned char character){
+    if(character < fontfile->first_char || character > fontfile->last_char) {
+        die("Char not in font!");
+        return 0;
+    }
+    int charOffset = character - fontfile->first_char;
+    return fontfile->info[(charOffset*CHAR_ENUM) + CHAR_WIDTH];
+}
+int calc_string(struct font* fontfile, char *StringOfCharacters, int spacing){
+    int i = 0;
+    while(*StringOfCharacters > 0)
+    {
+        i += calc_char(fontfile, *StringOfCharacters++);
+        i += spacing;
+    }
+    return i - spacing;
+}
+
 void die(char *StringOfCharacters){
     printf("#######################\nCRITICAL ERROR.%s\n#######################",StringOfCharacters);
 };
@@ -943,9 +1045,19 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
         // TOP LINE
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
-        textend = type_string(canvas, 27, 1, & font_monofont_20, "STATS", 2); //  STATS text in topline //w: 50
+        type_string(canvas, 27, 1, & font_monofont_20, "STATS", 2); //  STATS text in topline //w: 50
         drawNormalLine(canvas, 84 , 10, DIM_X - 1 - 5 - 84, 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+        
+        //Stats info headline
+        level = debug_i;
+        int length = numDigits(level);
+        char buffer [length];
+        itoa (level,buffer,10);
+        type_string(canvas, 94, 10, & font_monofont_16, "LVL", 0);
+        type_string(canvas, 94 + 24 + ((2-length) * 6)  , 10, & font_monofont_16, buffer, 0);
+        
+        
         if (tab & TAB_STAT_STATUS) {
         // SIDE TABS
             if(mode == MODE_STATUS_CND) {
@@ -977,7 +1089,7 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
                 drawLifeBar(canvas, 330, 190, 40, LEFT);  //Leg 4
                                                           //TODO: make clear which legs is which.
             }
-            drawBox(canvas, 30-7, DIM_Y - 21,  49, 20);  // - - - Status
+            drawBox(canvas, 30-7, DIM_Y - 21, 49, 20);  // - - - Status
         } else if (tab & TAB_STAT_SPECIAL) {
             drawBox(canvas, 116-7, DIM_Y - 21,  70, 20);  // - - - S.P.E.C.I.A.L.
             drawLifeBar(canvas, 20, 20, 50, LEFT);
@@ -1035,15 +1147,17 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
     } else if (screen & SCREEN_GGST) {
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
-        textend = type_string(canvas, 27, 1, & font_monofont_20, "ITEMS", 2); //  STATS text in topline
-        drawNormalLine(canvas, 27 + 50 + 7 , 10, DIM_X - 1 - 5 - (27 + 50 + 7), 1); // - - - - - - - - - - top line, part 2
+        type_string(canvas, 27, 1, & font_monofont_20, "ITEMS", 2); //  STATS text in topline
+        drawNormalLine(canvas, 27 + 50 + 7 , 10, DIM_X - 1 - 5 - (27 + 48 + 7), 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
     } else if (screen & SCREEN_DATEN){
-        
+        drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
+        drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
+        textend = type_string(canvas, 27, 1, & font_monofont_20, "DATA", 2); //  DATA text in topline
+        drawNormalLine(canvas, 27 + 40 + 7 , 10, DIM_X - 1 - 5 - (27 + 38 + 7), 1); // - - - - - - - - - - top line, part 2
+        drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
     }
-    printf("#######################\nLength: %d\n#######################\n", textend);
-
-
+    //printf("#######################\nLength: %d\n#######################\n", textend);
 }
 
 void displayHelp(){

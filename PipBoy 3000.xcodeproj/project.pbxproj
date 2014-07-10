@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		859EE70D1947819D00600C51 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 859EE70C1947819D00600C51 /* main.c */; };
-		859EE70F1947819D00600C51 /* helloC.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 859EE70E1947819D00600C51 /* helloC.1 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +17,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				859EE70F1947819D00600C51 /* helloC.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -40,7 +38,6 @@
 		858CD9AC196E773600F2BEEC /* image_pip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image_pip.h; sourceTree = "<group>"; };
 		859EE7091947819D00600C51 /* PipBoy 3000 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "PipBoy 3000"; sourceTree = BUILT_PRODUCTS_DIR; };
 		859EE70C1947819D00600C51 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		859EE70E1947819D00600C51 /* helloC.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = helloC.1; sourceTree = "<group>"; };
 		85FDE664194F146B00D7D7EC /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,7 +55,7 @@
 		859EE7001947819D00600C51 = {
 			isa = PBXGroup;
 			children = (
-				859EE70B1947819D00600C51 /* helloC */,
+				859EE70B1947819D00600C51 /* PipBoy 3000 */,
 				859EE70A1947819D00600C51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,7 +68,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		859EE70B1947819D00600C51 /* helloC */ = {
+		859EE70B1947819D00600C51 /* PipBoy 3000 */ = {
 			isa = PBXGroup;
 			children = (
 				85FDE664194F146B00D7D7EC /* main.h */,
@@ -85,12 +82,12 @@
 				853E599A196EF24800E2DD12 /* font_monofont_20.h */,
 				85598D7C196750E9000D214C /* font_monofont_24.h */,
 				859EE70C1947819D00600C51 /* main.c */,
-				859EE70E1947819D00600C51 /* helloC.1 */,
 				85598D791966A263000D214C /* LINE.h */,
 				85598D761965A250000D214C /* font_a.h */,
 				85598D781966A222000D214C /* FONT.h */,
 				85598D7E196857F3000D214C /* SCREEN.h */,
 			);
+			name = "PipBoy 3000";
 			path = helloC;
 			sourceTree = "<group>";
 		};
