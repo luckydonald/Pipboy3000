@@ -155,7 +155,7 @@ struct pos {
 
 
 //byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
-double colorHue = 0.57;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
+double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
@@ -273,7 +273,9 @@ int main() //int argc, const char * argv[] //hauptteil
     
     //insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     //insertAt(hslOutputArray,  0,  0, & pip_image);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL + TAB_STAT_SKILLS + TAB_STAT_SPECIAL + TAB_STAT_STATUS + TAB_STAT_PERKS,0);
+    
+    //drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS,0);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
     writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
 
     /*
@@ -676,6 +678,8 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int he
     }
     
 }
+
+
 // char Test[12] = {'H','a','l','l','o',' ','W','o','r','l','d','\0'};
 // das abschliessende \0 nicht vergessen! Sonst ist
 // das kein String!
@@ -780,6 +784,86 @@ void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int height)
         }
     }
 }
+void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte arrow_side){
+    int width = 63;
+    /*if(arrow_side & LEFT) {
+        width += 10;
+    }
+    if(arrow_side & RIGHT) {
+        width += 10;
+    }*/
+    
+    //(arrow_side & LEFT ? 10:0)
+    //arrow h=4px
+    //
+    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
+         if(arrow_side & LEFT) {
+            if(x-canvas_x <= 8) {      //fade part
+                double alpha = (x-canvas_x)*0.125;
+                printf("+%d\n", x-canvas_x);
+
+                int canvas_pos = XY_POS(x, canvas_y);
+                canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alpha);
+                canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alpha);
+            } else if(x-canvas_x <= 8 + 5) { //arrow part >8
+                for (int y = canvas_y; y <= (x-canvas_x-8+canvas_y); y++){
+                    int canvas_pos = XY_POS(x, y);
+                    canvas[canvas_pos + S] = 1;
+                    canvas[canvas_pos + L] = 0.5;
+                }
+            }
+        }else if(x-canvas_x == 8 + 5) { //left enclosing line
+            for (int y = canvas_y; y <= canvas_y + 9; y++){
+                int canvas_pos = XY_POS(x, y);
+                canvas[canvas_pos + S] = 1;
+                canvas[canvas_pos + L] = 0.5;
+            }
+        }
+        if((x-canvas_x == 8 + 5 + 1)) { //space before bar
+            int canvas_pos = XY_POS(x, canvas_y);
+            canvas[canvas_pos + S] = 1;
+            canvas[canvas_pos + L] = 0.5;
+        }else if((x-canvas_x > 8 + 5 + 1) &&  (x-canvas_x <= 8 + 5 + 1 + 33)) { // the bar itself
+            int canvas_pos = XY_POS(x, canvas_y);
+            canvas[canvas_pos + S] = 1;
+            canvas[canvas_pos + L] = 0.5;
+            for (int y = canvas_y + 2; y <= canvas_y + 9; y++){
+                canvas_pos = XY_POS(x, y);
+                canvas[canvas_pos + S] = 1;
+                canvas[canvas_pos + L] = 0.5;
+            }
+        }else if(x-canvas_x == 8 + 5 + 1 + 33 + 1) { //space after bar
+            int canvas_pos = XY_POS(x, canvas_y);
+            canvas[canvas_pos + S] = 1;
+            canvas[canvas_pos + L] = 0.5;
+        }
+        if (arrow_side & RIGHT) {
+            if(x-canvas_x > 8 + 5 + 1 + 33 + 1  && x-canvas_x <= 8 + 5 + 1 + 33 + 1 + 5) { //arrow part >8
+                for (int y = canvas_y; y <= (canvas_y + (canvas_x + 8 + 5 + 1 + 33 + 1 + 6 - x)); y++){
+                    int canvas_pos = XY_POS(x, y);
+                    canvas[canvas_pos + S] = 1;
+                    canvas[canvas_pos + L] = 0.5;
+                }
+            }else if((x-canvas_x > 8 + 5 + 1 + 33 + 1 + 5) && x-canvas_x <= 8 + 5 + 1 + 33 + 1 + 5 + 8) {      //fade part
+                double alpha = (canvas_x + 8 + 5 + 1 + 33 + 1 + 5 + 9 - x) * 0.125;
+                printf("-%d=%d\n", canvas_x + 8 + 5 + 1 + 33 + 1 + 5 + 9 - x, x);
+                int canvas_pos = XY_POS(x, canvas_y);
+                canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alpha);
+                canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alpha);
+            }
+        }else{
+            if(x-canvas_x == 8 + 5 + 1 + 33 + 1 + 1) { //right enclosing line
+                for (int y = canvas_y; y <= canvas_y + 9; y++){ // the bar itself
+                    int canvas_pos = XY_POS(x, y);
+                    canvas[canvas_pos + S] = 1;
+                    canvas[canvas_pos + L] = 0.5;
+                }
+            }
+        }
+        
+        
+    }
+}
 void drawScreen(double* canvas, byte screen, byte tab, byte part){
     int textend = 0; //Debug //TODO remove.
     insertAt(canvas,  0,  0, & bg_image);
@@ -818,6 +902,9 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
             drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - Status
         } else if (tab & TAB_STAT_SPECIAL) {
             drawBox(canvas, 74, DIM_Y - 21,  70, 20);  // - - - S.P.E.C.I.A.L.
+            drawLifeBar(canvas, 20, 20, 50, LEFT);
+            drawLifeBar(canvas, 20, 40, 50, NONE);
+            drawLifeBar(canvas, 20, 60, 50, RIGHT);
         } else if (tab & TAB_STAT_SKILLS) {
             drawBox(canvas, 155, DIM_Y - 21,  50, 20); // - - - Skills
         } else if (tab & TAB_STAT_PERKS) {
