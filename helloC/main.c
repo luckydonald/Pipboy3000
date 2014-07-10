@@ -93,7 +93,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h> //using printf()
+#ifndef _WIN32
 #include <stdlib.h> //using malloc()
+#endif
 
 #include "main.h"
 
