@@ -93,7 +93,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h> //using printf()
+#ifndef _WIN32
 #include <stdlib.h> //using malloc()
+#endif
 
 #include "main.h"
 
@@ -156,7 +158,7 @@ struct pos {
 
 //global definitions
 double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
-                        //0.08 = Orange !
+                               //0.08 = Orange !
 boolean debug = true;
 int debug_i = 0;
 int level = 19;
@@ -351,7 +353,7 @@ int main() //int argc, const char * argv[] //hauptteil
                 debug_i -= 10;
                 printf("Debug_i now: %d\n", debug_i);
                 break;
-
+                
             default:
                 printf("Input not recognized: %c\n", c);
                 continue;
@@ -363,115 +365,115 @@ int main() //int argc, const char * argv[] //hauptteil
     } while(!quit);
     
     /*
-    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS, MODE_STATUS_CND);
-    writeToFile("output_1.ppm", hslOutputArray, colorHue);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
-    writeToFile("output_2.ppm", hslOutputArray, colorHue);
-    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_SKILLS, 0);
-    writeToFile("output_3.ppm", hslOutputArray, colorHue);
-    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_PERKS, 0);
-    writeToFile("output_4.ppm", hslOutputArray, colorHue);
-    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_GENERAL, 0);
-    writeToFile("output_5.ppm", hslOutputArray, colorHue);
+     drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS, MODE_STATUS_CND);
+     writeToFile("output_1.ppm", hslOutputArray, colorHue);
+     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
+     writeToFile("output_2.ppm", hslOutputArray, colorHue);
+     drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_SKILLS, 0);
+     writeToFile("output_3.ppm", hslOutputArray, colorHue);
+     drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_PERKS, 0);
+     writeToFile("output_4.ppm", hslOutputArray, colorHue);
+     drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_GENERAL, 0);
+     writeToFile("output_5.ppm", hslOutputArray, colorHue);
      */
     
-
+    
     /*
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
-    writeToFile("first_Status_CND.ppm", hslOutputArray, colorHue);
-    
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
-    writeToFile("first_SPECIAL.ppm", hslOutputArray, colorHue);
-    
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SKILLS,0);
-    writeToFile("first_Skills.ppm", hslOutputArray, colorHue);
-    
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL,0);
-    writeToFile("first_General.ppm", hslOutputArray, colorHue);
-*/
+     insertAt(hslOutputArray,  0,  0, & bg_resized_image);
+     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
+     writeToFile("first_Status_CND.ppm", hslOutputArray, colorHue);
+     
+     insertAt(hslOutputArray,  0,  0, & bg_resized_image);
+     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
+     writeToFile("first_SPECIAL.ppm", hslOutputArray, colorHue);
+     
+     insertAt(hslOutputArray,  0,  0, & bg_resized_image);
+     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SKILLS,0);
+     writeToFile("first_Skills.ppm", hslOutputArray, colorHue);
+     
+     insertAt(hslOutputArray,  0,  0, & bg_resized_image);
+     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL,0);
+     writeToFile("first_General.ppm", hslOutputArray, colorHue);
+     */
     //checks
     
     //Normal Line Checks
     
     //void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int width, int height);
     /*drawNormalLine(hslOutputArray, 10, 10, DIM_X, DIM_Y, 50, 2);
-    drawNormalLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65, 2);
-    drawNormalLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80, 2);
-    drawNormalLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2);
-    drawNormalLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100);
-    drawNormalLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100);
-    drawNormalLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100);
-    drawNormalLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100);
-    drawNormalLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100);
-    */
-  
-    /*
-    drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y,  50, 2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y,  65, 2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y,  50, 2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y,  80, 2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y,  50, 2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 60, DIM_X, DIM_Y, 100, 2, LEFT);
+     drawNormalLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65, 2);
+     drawNormalLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80, 2);
+     drawNormalLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2);
+     drawNormalLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100);
+     drawNormalLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100);
+     drawNormalLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100);
+     drawNormalLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100);
+     drawNormalLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100);
+     */
     
-    drawFadedLine(hslOutputArray, 20, 70, DIM_X, DIM_Y, 2, 100, NONE);
-    drawFadedLine(hslOutputArray, 30, 70, DIM_X, DIM_Y, 2, 100, TOP);
-    drawFadedLine(hslOutputArray, 40, 70, DIM_X, DIM_Y, 2, 100, NONE);
-    drawFadedLine(hslOutputArray, 50, 70, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
-    drawFadedLine(hslOutputArray, 60, 70, DIM_X, DIM_Y, 2, 100, NONE);
-    drawFadedLine(hslOutputArray, 70, 70, DIM_X, DIM_Y, 2, 100, BOTTOM);
-    drawFadedLine(hslOutputArray, 80, 70, DIM_X, DIM_Y, 2, 100, NONE);
-    */
+    /*
+     drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y,  50, 2, LEFT);
+     drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y,  65, 2, LEFT);
+     drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y,  50, 2, LEFT);
+     drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y,  80, 2, LEFT);
+     drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y,  50, 2, LEFT);
+     drawFadedLine(hslOutputArray, 10, 60, DIM_X, DIM_Y, 100, 2, LEFT);
+     
+     drawFadedLine(hslOutputArray, 20, 70, DIM_X, DIM_Y, 2, 100, NONE);
+     drawFadedLine(hslOutputArray, 30, 70, DIM_X, DIM_Y, 2, 100, TOP);
+     drawFadedLine(hslOutputArray, 40, 70, DIM_X, DIM_Y, 2, 100, NONE);
+     drawFadedLine(hslOutputArray, 50, 70, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
+     drawFadedLine(hslOutputArray, 60, 70, DIM_X, DIM_Y, 2, 100, NONE);
+     drawFadedLine(hslOutputArray, 70, 70, DIM_X, DIM_Y, 2, 100, BOTTOM);
+     drawFadedLine(hslOutputArray, 80, 70, DIM_X, DIM_Y, 2, 100, NONE);
+     */
     /*drawFadedLine(hslOutputArray, 10, 10, DIM_X, DIM_Y, 50,  2, LEFT);
-    drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65,  2, RIGHT);
-    drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80,  2, TOP);
-    drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2, BOTTOM);
-    drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100, TOP);
-    drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
-    drawFadedLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100, LEFT);
-    drawFadedLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100, LEFT);
-    drawFadedLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100, LEFT);
-    */
+     drawFadedLine(hslOutputArray, 10, 20, DIM_X, DIM_Y, 65,  2, RIGHT);
+     drawFadedLine(hslOutputArray, 10, 30, DIM_X, DIM_Y, 80,  2, TOP);
+     drawFadedLine(hslOutputArray, 10, 40, DIM_X, DIM_Y, 100, 2, BOTTOM);
+     drawFadedLine(hslOutputArray, 10, 50, DIM_X, DIM_Y, 2, 100, TOP);
+     drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 2, 100, TOP + BOTTOM);
+     drawFadedLine(hslOutputArray, 30, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+     drawFadedLine(hslOutputArray, 40, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+     drawFadedLine(hslOutputArray, 50, 50, DIM_X, DIM_Y, 2, 100, LEFT);
+     */
     
     
     /*
-    drawFadedLine(hslOutputArray,   0,   0, DIM_X, DIM_Y, 50, 50, LEFT);
-    drawFadedLine(hslOutputArray,  60,   0, DIM_X, DIM_Y, 50, 50, TOP);
-    drawFadedLine(hslOutputArray, 120,   0, DIM_X, DIM_Y, 50, 50, RIGHT);
-    drawFadedLine(hslOutputArray, 180,   0, DIM_X, DIM_Y, 50, 50, BOTTOM);
-
-    drawFadedLine(hslOutputArray,   0,  60, DIM_X, DIM_Y, 50, 50, NONE);
-    drawFadedLine(hslOutputArray,  60,  60, DIM_X, DIM_Y, 50, 50, BOTTOM+TOP);
-    drawFadedLine(hslOutputArray, 120,  60, DIM_X, DIM_Y, 50, 50, LEFT+RIGHT);
-    drawFadedLine(hslOutputArray, 180,  60, DIM_X, DIM_Y, 50, 50, LEFT+TOP+RIGHT+BOTTOM);
+     drawFadedLine(hslOutputArray,   0,   0, DIM_X, DIM_Y, 50, 50, LEFT);
+     drawFadedLine(hslOutputArray,  60,   0, DIM_X, DIM_Y, 50, 50, TOP);
+     drawFadedLine(hslOutputArray, 120,   0, DIM_X, DIM_Y, 50, 50, RIGHT);
+     drawFadedLine(hslOutputArray, 180,   0, DIM_X, DIM_Y, 50, 50, BOTTOM);
+     
+     drawFadedLine(hslOutputArray,   0,  60, DIM_X, DIM_Y, 50, 50, NONE);
+     drawFadedLine(hslOutputArray,  60,  60, DIM_X, DIM_Y, 50, 50, BOTTOM+TOP);
+     drawFadedLine(hslOutputArray, 120,  60, DIM_X, DIM_Y, 50, 50, LEFT+RIGHT);
+     drawFadedLine(hslOutputArray, 180,  60, DIM_X, DIM_Y, 50, 50, LEFT+TOP+RIGHT+BOTTOM);
+     
+     drawFadedLine(hslOutputArray,   0, 120, DIM_X, DIM_Y, 50, 50, LEFT+TOP);
+     drawFadedLine(hslOutputArray,  60, 120, DIM_X, DIM_Y, 50, 50, TOP+RIGHT);
+     drawFadedLine(hslOutputArray, 120, 120, DIM_X, DIM_Y, 50, 50, RIGHT+BOTTOM);
+     drawFadedLine(hslOutputArray, 180, 120, DIM_X, DIM_Y, 50, 50, LEFT+BOTTOM);
+     */
     
-    drawFadedLine(hslOutputArray,   0, 120, DIM_X, DIM_Y, 50, 50, LEFT+TOP);
-    drawFadedLine(hslOutputArray,  60, 120, DIM_X, DIM_Y, 50, 50, TOP+RIGHT);
-    drawFadedLine(hslOutputArray, 120, 120, DIM_X, DIM_Y, 50, 50, RIGHT+BOTTOM);
-    drawFadedLine(hslOutputArray, 180, 120, DIM_X, DIM_Y, 50, 50, LEFT+BOTTOM);
-    */
-
-
+    
     
     /**/
     /*type_string(hslOutputArray, 5, 10,  DIM_X, DIM_Y, &monofont_font, color, "Bitches, es geht!");
-    type_colored_string(hslOutputArray, 5, 50,  DIM_X, DIM_Y, &monofont_font, color, "Text, Blabcdefghijklmnopqrstuvwxyz");
-    type_colored_string(hslOutputArray, 5, 70,  DIM_X, DIM_Y, &monofont_font, color, "1234567890 ABCDEFGHIJKLMNOPQRSTUVW");
-    type_colored_string(hslOutputArray, 5, 90,  DIM_X, DIM_Y, &monofont_font, color, "Und naturlich XYZ+-#*^%${~}[/|\\]\"");
-    type_colored_string(hslOutputArray, 5,200,  DIM_X, DIM_Y, &monofont_font, color, "#2 btw...");
-    */
+     type_colored_string(hslOutputArray, 5, 50,  DIM_X, DIM_Y, &monofont_font, color, "Text, Blabcdefghijklmnopqrstuvwxyz");
+     type_colored_string(hslOutputArray, 5, 70,  DIM_X, DIM_Y, &monofont_font, color, "1234567890 ABCDEFGHIJKLMNOPQRSTUVW");
+     type_colored_string(hslOutputArray, 5, 90,  DIM_X, DIM_Y, &monofont_font, color, "Und naturlich XYZ+-#*^%${~}[/|\\]\"");
+     type_colored_string(hslOutputArray, 5,200,  DIM_X, DIM_Y, &monofont_font, color, "#2 btw...");
+     */
     //type_string(hslOutputArray, 30, 215,  DIM_X, DIM_Y, & font_monofont_18, "Hier konnte Ihre Werbung stehen! - Level 69");
-
+    
     //type_colored_string(hslOutputArray, 25, 1,  DIM_X, DIM_Y, & font_monofont_18, color, "PipBuck");
-
+    
     //Faded Line Checks
     //drawFadedLine(hslOutputArray, 20, 50, DIM_X, DIM_Y, 50, 50, LEFT);
     printf("Shutting Down.\n");
 	free(hslOutputArray);
-
+    
     return 0;
 }
 
@@ -581,8 +583,8 @@ void writeToFile(const char* name, double* hslColors, double colorHue) {
 struct RGBColor convertHSLtoRGB(struct HSLColor color){
     int r, g, b;
     double h = color.h,
-           s = color.s,
-           l = color.l;
+    s = color.s,
+    l = color.l;
     double var1;
     double var2;
     if (s == 0) {  					//HSL from 0 to 1
@@ -668,7 +670,7 @@ struct HSLColor convertRGBtoHSL(struct RGBColor color){
      	s = 0.0;
     }else{
         if (l < 0.5){
-    	    	s = delta / (max + min);
+            s = delta / (max + min);
         }else{
      		s = delta / (2.0 - max - min);
         }
@@ -729,13 +731,13 @@ void drawNormalLine(double* canvas, int canvas_x, int canvas_y, int width, int h
     color.h = colorHue;
     color.s = 1;//223/255;
     color.l = 127.0/255.0;//56/255;
-    //printf("Drawing Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
+                          //printf("Drawing Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
     for (int x = canvas_x; x < canvas_x + width &&  x < DIM_X; x++) {
         for (int y = canvas_y; y < canvas_y + height &&  y < DIM_Y; y++) {
             int canvas_pos = XY_POS(x, y);
             canvas[canvas_pos + S] = color.s;
             canvas[canvas_pos + L] = color.l;
-                //printf("Drawing Line Pixel: (x: %d, y: %d) => (h: %f, s: %f, l: %f)\n\n", x, y, color.h, color.s, color.l);
+            //printf("Drawing Line Pixel: (x: %d, y: %d) => (h: %f, s: %f, l: %f)\n\n", x, y, color.h, color.s, color.l);
         }
     }
 }
@@ -747,7 +749,7 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int he
     color.l = 0.5; //127.0/255.0;
                    //printf("Drawing Faded Line: (x: %d, y: %d, w: %d, h: %d) => (h: %f, s: %f, l: %f)\n\n", canvas_x, canvas_y, width, height, color.h, color.s, color.l);
                    //printf("Output: (where: %d, LEFT: %d, TOP: %d, RIGHT: %d, BOTTOM: %d, isLEFT: %s, isTOP: %s, isRIGHT: %s, isBOTTOM: %s)\n\n", where, LEFT, TOP, RIGHT, BOTTOM, (where & LEFT ? "true":"false"),(where & TOP ? "true":"false"),(where & RIGHT ? "true":"false"),(where & BOTTOM ? "true":"false"));
-    //for (int y = canvas_y; ( y < DIM_Y ) && ( y - canvas_y < image_h) ; y++) {
+                   //for (int y = canvas_y; ( y < DIM_Y ) && ( y - canvas_y < image_h) ; y++) {
     for (int x = canvas_x; x < canvas_x + width &&  x < DIM_X; x++) { //TODO: < oder <= ?
         for (int y = canvas_y; y < canvas_y + height &&  y < DIM_Y; y++) { //TODO: < oder <= ?
             int canvas_pos = XY_POS(x, y);
@@ -756,17 +758,17 @@ void drawFadedLine(double* canvas, int canvas_x, int canvas_y, int width, int he
             double alphaX  = 1;//bla
             if((where & LEFT) && (x - canvas_x < 16)){
                 alphaX  =  min(alphaX, ((x - canvas_x) * 0.0625)); // 1/8 = 0.125 alpha per px
-                //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
+                                                                   //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
             }
             if((where & RIGHT) && width - (x - canvas_x) < 16){
                 alphaX  =  min(alphaX, (width - (x - canvas_x)) * 0.0625);
             }
             if((where & TOP) && (y - canvas_y < 16)){
-                 alphaX  =  min(alphaX, ((y - canvas_y) * 0.0625)); // 1/8 = 0.125 alpha per px
-                                                                  //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
+                alphaX  =  min(alphaX, ((y - canvas_y) * 0.0625)); // 1/8 = 0.125 alpha per px
+                                                                   //printf("Fading: (x: %d, y: %d, w: %d, hue= %d, a: %f)", x, y, width, height, alphaX);
             }
             if((where & BOTTOM) && height - (y - canvas_y) < 16){
-                 alphaX  =  min(alphaX, (height - (y - canvas_y)) * 0.0625);
+                alphaX  =  min(alphaX, (height - (y - canvas_y)) * 0.0625);
             }
             
             canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alphaX);
@@ -812,26 +814,26 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font
             int curr_x = canvas_x + x;
             int curr_y = canvas_y + y;
             pos = ((x) + (y * char_i.width));
-
+            
             //check canvas out of bounds
             if(curr_x > DIM_X){
                 //printf("[%c] Out Of Range (X)... (([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
-
+                
                 continue;
             }else if (curr_y > DIM_Y){
                 // printf("[%c] Out Of Range (Y)... (([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character,curr_x,curr_y,char_i.start,pos,char_i.offset, char_i.length);
                 continue;
             }else if(pos < char_i.start){ //check if we can start? else keep moving untill we reached the right pixel where to start.
-                                           //TODO mayby 1 to late? running again at 74, with 73 in the file
-                                           //TODO fix in java
-                                           //printf("[%c] Skipping... ([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character, curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length);
-                //int canvas_pos = XY_POS(curr_x,curr_y);
-                //canvas[canvas_pos + S] = 1.0;
-                //canvas[canvas_pos + L] = 0.7;
+                                          //TODO mayby 1 to late? running again at 74, with 73 in the file
+                                          //TODO fix in java
+                                          //printf("[%c] Skipping... ([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character, curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length);
+                                          //int canvas_pos = XY_POS(curr_x,curr_y);
+                                          //canvas[canvas_pos + S] = 1.0;
+                                          //canvas[canvas_pos + L] = 0.7;
                 continue; //used to calculate the x,y of the start, most efficient way I guess (modulo makes a for-loop too when compiled.)
             }else if(pos >= char_i.length + char_i.start){
                 //writeToFile("temp.ppm", canvas, 0.5);
-
+                
                 //printf("[%c] Done! ([x:%d|%d:y] start: %d, pos: %ld, offset:%ld, length: %d)\n", character, curr_x,curr_y, char_i.start,pos,char_i.offset, char_i.length);
                 //int canvas_pos = XY_POS(curr_x,curr_y);
                 //canvas[canvas_pos + S] = 1.0;
@@ -853,7 +855,7 @@ int type_char(double* canvas, int canvas_x, int canvas_y, int x_pos, struct font
         }
     }
     //writeToFile("temp.ppm", canvas, 0.5);
-
+    
     return x_pos;
 }
 char nthdigit(int x, int n)
@@ -966,7 +968,7 @@ void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte a
     //TODO: implement percent ability
     int bar_px = percent * 0.34;
     for (int x = canvas_x; x < canvas_x + 29 + 34 &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
-         if(arrow_side & LEFT) {
+        if(arrow_side & LEFT) {
             if(x-canvas_x <= 8) {      //fade part
                 double alpha = (x-canvas_x)*0.125;
                 int canvas_pos = XY_POS(x, canvas_y);
@@ -1059,7 +1061,7 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
         
         
         if (tab & TAB_STAT_STATUS) {
-        // SIDE TABS
+            // SIDE TABS
             if(mode == MODE_STATUS_CND) {
                 drawBox(canvas, 5, 32,  35, 20);
             } else if(mode == MODE_STATUS_RAD) {
@@ -1076,8 +1078,8 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
             if(mode == MODE_STATUS_CND) {
                 //insertAt(canvas,  35,  20, & pipstats_image_mono); // - - - - - fallout boy / littlepip
                 insertAt(canvas,  146,  30, & pip_image); // - - - - - fallout boy / littlepip
-                //x: (480/2)-(187/2) = 146,5
-                //y: (272/2)-(180/2) = 46
+                                                          //x: (480/2)-(187/2) = 146,5
+                                                          //y: (272/2)-(180/2) = 46
                 type_string(canvas, 170, 226, & font_monofont_16_b, "LittlePip - Level 20", 0);
                 //x: (480/2)-(140/2) = 170
                 //y: (272/2)+(180/2) +20 = 246
@@ -1101,7 +1103,7 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
             drawBox(canvas, 321-7, DIM_Y - 21,  44, 20); // - - - Perks
         } else if (tab & TAB_STAT_GENERAL) { //TAB_STAT_GENERAL
             drawBox(canvas, 411-7, DIM_Y - 21,  56, 20); // - - - General
-
+            
         } else {
             die("Unknown STATS tab.");
         }
@@ -1110,37 +1112,37 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
         drawFadedLine(canvas, 10, DIM_Y - 27,  1, 18, TOP); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 10, DIM_Y - 10, 13, 1); // - - - - - - - - - - - top line, part one
         type_string(canvas, 30,  DIM_Y - 19, & font_monofont_16, "Status", 0); //width: 36px
-            //x: 48 + (96 * 0) - (36 / 2)
+                                                                               //x: 48 + (96 * 0) - (36 / 2)
         drawNormalLine(canvas, 72 , DIM_Y - 10, 37, 1); // - - - - - - - - - - top line, part 2
         type_string(canvas, 116,  DIM_Y - 19, & font_monofont_16, "S.P.E.C.I.A.L.", -2); //width: 56px
-            //x: 48 + (96 * 1) - (56/ 2)
+                                                                                         //x: 48 + (96 * 1) - (56/ 2)
         drawNormalLine(canvas, 179 , DIM_Y - 10, 36, 1); // - - - - - - - - - - top line, part 2
         type_string(canvas, 222,  DIM_Y - 19, & font_monofont_16, "Skills", 0); //width: 36px
-            //x: 48 + (96 * 2) - (36 / 2)
+                                                                                //x: 48 + (96 * 2) - (36 / 2)
         drawNormalLine(canvas, 265 , DIM_Y - 10, 49, 1); // - - - - - - - - - - top line, part 2
         type_string(canvas, 321,  DIM_Y - 19, & font_monofont_16, "Perks", 0); //width: 30px
-            //x: 48 + (96 * 3) - (30 / 2)
+                                                                               //x: 48 + (96 * 3) - (30 / 2)
         drawNormalLine(canvas, 358 , DIM_Y - 10, 46, 1); // - - - - - - - - - - top line, part 2
         type_string(canvas, 411 ,  DIM_Y - 19, & font_monofont_16, "General", 0); //width: 42px
-            //x: 48 + (96 * 4) - (42 / 2)
+                                                                                  //x: 48 + (96 * 4) - (42 / 2)
         drawNormalLine(canvas, 460 , DIM_Y - 10, 14, 1); // - - - - - - - - - - top line, part 2
         drawFadedLine(canvas, DIM_X - 1 - 5, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
-
-                            //(68 * 0) + 44
         
-         // Tab Marker
+        //(68 * 0) + 44
+        
+        // Tab Marker
         /*
-        // To mark the center of the tabs.
-        drawFadedLine(canvas, 48 + (96 * 0), DIM_Y - 28,  1, 18, TOP + BOTTOM);
-        drawFadedLine(canvas, 48 + (96 * 1), DIM_Y - 28,  1, 18, TOP + BOTTOM);
-        drawFadedLine(canvas, 48 + (96 * 2), DIM_Y - 28,  1, 18, TOP + BOTTOM);
-        drawFadedLine(canvas, 48 + (96 * 3), DIM_Y - 28,  1, 18, TOP + BOTTOM);
-        drawFadedLine(canvas, 48 + (96 * 4), DIM_Y - 28,  1, 18, TOP + BOTTOM);
-        */
+         // To mark the center of the tabs.
+         drawFadedLine(canvas, 48 + (96 * 0), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+         drawFadedLine(canvas, 48 + (96 * 1), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+         drawFadedLine(canvas, 48 + (96 * 2), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+         drawFadedLine(canvas, 48 + (96 * 3), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+         drawFadedLine(canvas, 48 + (96 * 4), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+         */
         
         
-
-
+        
+        
         //int textend =
         //
         
@@ -1173,7 +1175,7 @@ void displayHelp(){
     printf("-:   Scroll down.\n");
     printf("8-0: Change colors.\n");
     printf("The output will be written to the image file \"output.ppm\".\n");
-
+    
 }
 
 
