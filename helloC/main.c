@@ -274,8 +274,8 @@ int main() //int argc, const char * argv[] //hauptteil
     //insertAt(hslOutputArray,  0,  0, & bg_resized_image);
     //insertAt(hslOutputArray,  0,  0, & pip_image);
     
-    //drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS,0);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
+    drawScreen(hslOutputArray, SCREEN_STAT,TAB_STAT_STATUS, MODE_STATUS_CND);
+    //drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
     writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
 
     /*
@@ -785,23 +785,12 @@ void drawBox(double* canvas, int canvas_x, int canvas_y,  int width, int height)
     }
 }
 void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte arrow_side){
-    int width = 63;
-    /*if(arrow_side & LEFT) {
-        width += 10;
-    }
-    if(arrow_side & RIGHT) {
-        width += 10;
-    }*/
-    
-    //(arrow_side & LEFT ? 10:0)
-    //arrow h=4px
-    //
-    for (int x = canvas_x; x < canvas_x + width &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
+    //TODO: implement percent ability
+    int bar_px = percent * 0.34;
+    for (int x = canvas_x; x < canvas_x + 29 + 34 &&  x < canvas_x + DIM_X; x++) { //TODO: < oder <= ?
          if(arrow_side & LEFT) {
             if(x-canvas_x <= 8) {      //fade part
                 double alpha = (x-canvas_x)*0.125;
-                printf("+%d\n", x-canvas_x);
-
                 int canvas_pos = XY_POS(x, canvas_y);
                 canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alpha);
                 canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alpha);
@@ -813,7 +802,10 @@ void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte a
                 }
             }
         }else if(x-canvas_x == 8 + 5) { //left enclosing line
-            for (int y = canvas_y; y <= canvas_y + 9; y++){
+            int canvas_pos = XY_POS(x, canvas_y);
+            canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, 0.5);
+            canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, 0.5);
+            for (int y = canvas_y + 1; y <= canvas_y + 7; y++){
                 int canvas_pos = XY_POS(x, y);
                 canvas[canvas_pos + S] = 1;
                 canvas[canvas_pos + L] = 0.5;
@@ -823,45 +815,49 @@ void drawLifeBar(double* canvas, int canvas_x, int canvas_y, int percent, byte a
             int canvas_pos = XY_POS(x, canvas_y);
             canvas[canvas_pos + S] = 1;
             canvas[canvas_pos + L] = 0.5;
-        }else if((x-canvas_x > 8 + 5 + 1) &&  (x-canvas_x <= 8 + 5 + 1 + 33)) { // the bar itself
+        }else if((x-canvas_x > 8 + 5 + 1) &&  (x-canvas_x <= 8 + 5 + 1 + bar_px)) { // the bar itself, filled part
             int canvas_pos = XY_POS(x, canvas_y);
             canvas[canvas_pos + S] = 1;
             canvas[canvas_pos + L] = 0.5;
-            for (int y = canvas_y + 2; y <= canvas_y + 9; y++){
+            for (int y = canvas_y + 2; y <= canvas_y + 7; y++){
                 canvas_pos = XY_POS(x, y);
                 canvas[canvas_pos + S] = 1;
                 canvas[canvas_pos + L] = 0.5;
             }
-        }else if(x-canvas_x == 8 + 5 + 1 + 33 + 1) { //space after bar
+        }else if((x-canvas_x > 8 + 5 + 1 + bar_px) &&  (x-canvas_x <= 8 + 5 + 1 + 34)) { // the bar itself, empty part
+            int canvas_pos = XY_POS(x, canvas_y);
+            canvas[canvas_pos + S] = 1;
+            canvas[canvas_pos + L] = 0.5;
+        }else if(x-canvas_x == 8 + 5 + 1 + 34 + 1) { //space after bar
             int canvas_pos = XY_POS(x, canvas_y);
             canvas[canvas_pos + S] = 1;
             canvas[canvas_pos + L] = 0.5;
         }
         if (arrow_side & RIGHT) {
-            if(x-canvas_x > 8 + 5 + 1 + 33 + 1  && x-canvas_x <= 8 + 5 + 1 + 33 + 1 + 5) { //arrow part >8
-                for (int y = canvas_y; y <= (canvas_y + (canvas_x + 8 + 5 + 1 + 33 + 1 + 6 - x)); y++){
+            if(x-canvas_x > 8 + 5 + 1 + 34 + 1  && x-canvas_x <= 8 + 5 + 1 + 34 + 1 + 5) { //arrow part >8
+                for (int y = canvas_y; y <= (canvas_y + (canvas_x + 8 + 5 + 1 + 34 + 1 + 6 - x)); y++){
                     int canvas_pos = XY_POS(x, y);
                     canvas[canvas_pos + S] = 1;
                     canvas[canvas_pos + L] = 0.5;
                 }
-            }else if((x-canvas_x > 8 + 5 + 1 + 33 + 1 + 5) && x-canvas_x <= 8 + 5 + 1 + 33 + 1 + 5 + 8) {      //fade part
-                double alpha = (canvas_x + 8 + 5 + 1 + 33 + 1 + 5 + 9 - x) * 0.125;
-                printf("-%d=%d\n", canvas_x + 8 + 5 + 1 + 33 + 1 + 5 + 9 - x, x);
+            }else if((x-canvas_x > 8 + 5 + 1 + 34 + 1 + 5) && x-canvas_x <= 8 + 5 + 1 + 34 + 1 + 5 + 8 + 1) {      //fade part
+                double alpha = (canvas_x + 8 + 5 + 1 + 34 + 1 + 5 + 9 - x) * 0.125;
                 int canvas_pos = XY_POS(x, canvas_y);
                 canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, alpha);
                 canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, alpha);
             }
         }else{
-            if(x-canvas_x == 8 + 5 + 1 + 33 + 1 + 1) { //right enclosing line
-                for (int y = canvas_y; y <= canvas_y + 9; y++){ // the bar itself
+            if(x-canvas_x == 8 + 5 + 1 + 34 + 1 + 1) { //right enclosing line
+                int canvas_pos = XY_POS(x, canvas_y);
+                canvas[canvas_pos + S] = doMathMagic(canvas[canvas_pos + S], 1, 0.5);
+                canvas[canvas_pos + L] = doMathMagic(canvas[canvas_pos + L], 0.5, 0.5);
+                for (int y = canvas_y + 1; y <= canvas_y + 7; y++){
                     int canvas_pos = XY_POS(x, y);
                     canvas[canvas_pos + S] = 1;
                     canvas[canvas_pos + L] = 0.5;
                 }
             }
         }
-        
-        
     }
 }
 void drawScreen(double* canvas, byte screen, byte tab, byte part){
@@ -875,8 +871,8 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
         type_string(canvas, 27, 1, & font_monofont_18, "STATS", 2); //  STATS text in topline
-        drawNormalLine(canvas, 77 , 10, DIM_X - 5 - 77, 1); // - - - - - - - - - - top line, part 2
-        drawFadedLine(canvas, DIM_X - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+        drawNormalLine(canvas, 77 , 10, DIM_X - 1 - 5 - 77, 1); // - - - - - - - - - - top line, part 2
+        drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
         if (tab & TAB_STAT_STATUS) {
         // SIDE TABS
             if(tab & MODE_STATUS_CND) {
@@ -898,6 +894,13 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
                 textend = type_string(canvas, 170, 226, & font_monofont_16_b, "LittlePip - Level 20", 0);
                 //x: (480/2)-(140/2) = 170
                 //y: (272/2)+(180/2) +20 = 246
+                drawLifeBar(canvas,  70,  70, 90, RIGHT); //Head
+                drawLifeBar(canvas, 197, 125, 75, NONE);  //Body
+                drawLifeBar(canvas, 120, 170, 25, RIGHT); //Leg 1
+                drawLifeBar(canvas, 120, 190, 30, RIGHT); //Leg 2
+                drawLifeBar(canvas, 330, 170, 15, LEFT);  //Leg 3
+                drawLifeBar(canvas, 330, 190, 40, LEFT);  //Leg 4
+                                                          //TODO: make clear which legs is which.
             }
             drawBox(canvas, 20, DIM_Y - 21,  49, 20);  // - - - Status
         } else if (tab & TAB_STAT_SPECIAL) {
@@ -927,10 +930,10 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         drawNormalLine(canvas, 205 , DIM_Y - 10, 19, 1); // - - - - - - - - - - top line, part 2
         type_string(canvas, 230  ,  DIM_Y - 19, & font_monofont_16, "Perks", 0);
         drawNormalLine(canvas, 267 , DIM_Y - 10, 18, 1); // - - - - - - - - - - top line, part 2
-        type_string(canvas, DIM_X-20 - 42 - 7 ,  DIM_Y - 19, & font_monofont_16, "General", 0);
+        type_string(canvas, DIM_X- 1 - 20 - 42 - 7 ,  DIM_Y - 19, & font_monofont_16, "General", 0);
         drawNormalLine(canvas, 340 , DIM_Y - 10, 10, 1); // - - - - - - - - - - top line, part 2
 
-        drawFadedLine(canvas, DIM_X - 5, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
+        drawFadedLine(canvas, DIM_X - 1 - 5, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
 
                             //(68 * 0) + 44
         

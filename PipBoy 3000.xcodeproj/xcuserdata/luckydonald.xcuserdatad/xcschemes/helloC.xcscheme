@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "859EE7081947819D00600C51"
-               BuildableName = "helloC"
+               BuildableName = "PipBoy 3000"
                BlueprintName = "PipBoy 3000"
                ReferencedContainer = "container:PipBoy 3000.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
-            BuildableName = "helloC"
+            BuildableName = "PipBoy 3000"
             BlueprintName = "PipBoy 3000"
             ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
-            BuildableName = "helloC"
+            BuildableName = "PipBoy 3000"
             BlueprintName = "PipBoy 3000"
             ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "859EE7081947819D00600C51"
-            BuildableName = "helloC"
+            BuildableName = "PipBoy 3000"
             BlueprintName = "PipBoy 3000"
             ReferencedContainer = "container:PipBoy 3000.xcodeproj">
          </BuildableReference>
