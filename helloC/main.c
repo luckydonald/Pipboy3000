@@ -150,7 +150,7 @@ struct pos {
 
 
 //byte colorModifier[3] = {0xFF, 0x01, 0x33,0xFF};  //TODO: beautify this.
-double colorHue = 0;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
+double colorHue = 0.1;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                         //0.08 = Orange !
 
 // Funktionen die später kommen.
@@ -252,22 +252,28 @@ int main() //int argc, const char * argv[] //hauptteil
     //Ende der Objekt-Fälschungen
     
     //Image Checks
+    
+    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
+    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL + TAB_STAT_SKILLS + TAB_STAT_SPECIAL + TAB_STAT_STATUS + TAB_STAT_PERKS,0);
+    writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
+
+    /*
     insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_STATUS,MODE_STATUS_CND);
     writeToFile("first_Status_CND.ppm", hslOutputArray, colorHue);
+    
     insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SPECIAL,0);
     writeToFile("first_SPECIAL.ppm", hslOutputArray, colorHue);
+    
     insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_SKILLS,0);
     writeToFile("first_Skills.ppm", hslOutputArray, colorHue);
-    insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
-    drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_PERKS,0);
-    writeToFile("first_Perks.ppm", hslOutputArray, colorHue);
+    
     insertAt(hslOutputArray,  0,  0, & bg_resized_image_mono);
     drawScreen(hslOutputArray, SCREEN_STAT, TAB_STAT_GENERAL,0);
     writeToFile("first_General.ppm", hslOutputArray, colorHue);
-
+*/
     //checks
     
     //Normal Line Checks
@@ -762,8 +768,8 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
         type_string(canvas, 27, 1, & font_monofont_18, "STATS", 2); //  STATS text in topline
-        drawNormalLine(canvas, 77 , 10, 273, 1); // - - - - - - - - - - top line, part 2
-        drawFadedLine(canvas, 350, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+        drawNormalLine(canvas, 77 , 10, DIM_X - 5 - 77, 1); // - - - - - - - - - - top line, part 2
+        drawFadedLine(canvas, DIM_X - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
         if (tab & TAB_STAT_STATUS) {
         // SIDE TABS
             if(tab & MODE_STATUS_CND) {
@@ -809,17 +815,17 @@ void drawScreen(double* canvas, byte screen, byte tab, byte part){
         type_string(canvas, DIM_X-20 - 42 - 7 ,  DIM_Y - 19, & font_monofont_16, "General", 0);
         drawNormalLine(canvas, 340 , DIM_Y - 10, 10, 1); // - - - - - - - - - - top line, part 2
 
-        drawFadedLine(canvas, 350, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
+        drawFadedLine(canvas, DIM_X - 5, DIM_Y - 27, 1, 18, TOP); // - - - - - - - top line, faded part, right side
 
                             //(68 * 0) + 44
-        /*
+        
          // Tab Marker
-        drawFadedLine(canvas,  44, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-        drawFadedLine(canvas, 112, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-        drawFadedLine(canvas, 180, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-        drawFadedLine(canvas, 248, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-        drawFadedLine(canvas, 316, DIM_Y - 28,  1, 18, TOP + BOTTOM); // - - - - - - - top line, faded part, left side
-        */
+        drawFadedLine(canvas, 48 + (96 * 0), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        drawFadedLine(canvas, 48 + (96 * 1), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        drawFadedLine(canvas, 48 + (96 * 2), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        drawFadedLine(canvas, 48 + (96 * 3), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        drawFadedLine(canvas, 48 + (96 * 4), DIM_Y - 28,  1, 18, TOP + BOTTOM);
+        
         
 
 
