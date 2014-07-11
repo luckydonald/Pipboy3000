@@ -155,13 +155,21 @@ struct pos {
     int x;
     int y;
 };
+struct datablob {
+    int level;
+    int hp;
+    int ap;
+    int xp;
+};
 
 //global definitions
 double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                                //0.08 = Orange !
 boolean debug = true;
 int debug_i = 0;
-int level = 19;
+struct datablob storage;
+
+
 
 
 // Funktionen die später kommen.
@@ -267,6 +275,12 @@ int main() //int argc, const char * argv[] //hauptteil
     font_monofont_24.info = font_monofont_24_info;
     font_monofont_24.data = font_monofont_24_data;
     //Ende der Objekt-Fälschungen
+    storage.level = 19;
+    storage.hp = 294;
+    storage.ap = 84;
+    storage.xp = 11997;
+    
+    
     
     
     boolean quit = false;
@@ -1045,19 +1059,33 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
     insertAt(canvas,  0,  0, & bg_image);
     if (screen & SCREEN_STAT) {
         // TOP LINE
+        storage.hp = debug_i;
         drawFadedLine(canvas, 5, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         drawNormalLine(canvas, 5, 10, 15, 1); // - - - - - - - - - - - top line, part one
         type_string(canvas, 27, 1, & font_monofont_20, "STATS", 2); //  STATS text in topline //w: 50
-        drawNormalLine(canvas, 84 , 10, DIM_X - 1 - 5 - 84, 1); // - - - - - - - - - - top line, part 2
-        drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
-        
+            // 94 + 24 + (2 * 6) + 2 - 84 = 48
         //Stats info headline
-        level = debug_i;
-        int length = numDigits(level);
+        drawNormalLine(canvas, 84  , 10, 48, 1); // - - - - - - - - - - top line, part 2
+        int length = numDigits(storage.level);
         char buffer [length];
-        itoa (level,buffer,10);
+        itoa (storage.level,buffer,10);
         type_string(canvas, 94, 10, & font_monofont_16, "LVL", 0);
         type_string(canvas, 94 + 24 + ((2-length) * 6)  , 10, & font_monofont_16, buffer, 0);
+        drawFadedLine(canvas, 132, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
+        length = numDigits(storage.hp);
+        char buffer2 [length];
+        itoa (storage.hp,buffer2,10);
+        drawNormalLine(canvas,132 + 6  , 10, (132 + 8 + 18 + (7 * 6) - 2) - (132 + 6), 1); // - - - - - - - - - - top line, part 3
+        type_string(canvas, 132 + 8, 10, & font_monofont_16, "HP", 0);
+        type_string(canvas, 132 + 8 + 18, 10, & font_monofont_16, buffer2, 0);
+        type_string(canvas, 132 + 8 + 18 + (3 * 6) - 2, 10, & font_monofont_16, "/350", 0);
+
+        
+            //94 + 24 + (2 * 6) + 2 = 132
+        drawFadedLine(canvas, DIM_X - 1 - 5, 10, 1, 18, BOTTOM); // - - - - - - - top line, faded part, right side
+
+        //type_string(canvas, 94, 10, & font_monofont_16, "LVL", 0);
+        //type_string(canvas, 94 + 24 + ((2-length) * 6)  , 10, & font_monofont_16, buffer, 0);
         
         
         if (tab & TAB_STAT_STATUS) {
