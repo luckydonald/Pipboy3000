@@ -99,6 +99,7 @@
 
 #include "main.h"
 
+#include "bmpio.h"
 
 //requirements
 #include "FONT.h"
@@ -1067,13 +1068,13 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
         //Stats info headline
         drawNormalLine(canvas, 84  , 10, 48, 1); // - - - - - - - - - - top line, part 2
         int length = numDigits(storage.level);
-        char buffer [length];
+        char buffer[1];
         itoa (storage.level,buffer,10);
         type_string(canvas, 94, 10, & font_monofont_16, "LVL", 0);
         type_string(canvas, 94 + 24 + ((2-length) * 6)  , 10, & font_monofont_16, buffer, 0);
         drawFadedLine(canvas, 132, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         length = numDigits(storage.hp);
-        char buffer2 [length];
+        char buffer2[1];
         itoa (storage.hp,buffer2,10);
         drawNormalLine(canvas,132 + 6  , 10, (132 + 8 + 18 + (7 * 6) - 2) - (132 + 6), 1); // - - - - - - - - - - top line, part 3
         type_string(canvas, 132 + 8, 10, & font_monofont_16, "HP", 0);
