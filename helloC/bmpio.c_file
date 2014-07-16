@@ -20,7 +20,7 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 
 	FILE *fp = fopen(path, "wb"); // b - binary mode
 
-	int imageSize = width * height;
+	int imageSize = width * height; //TODO: Unused
 
 	int fill = (width * 3) % 4;
 
@@ -56,4 +56,5 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 		fwrite(filler, 1, fill, fp);
 	}
 	fclose(fp);
+    return 42; //TODO.
 }

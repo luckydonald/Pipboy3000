@@ -99,7 +99,7 @@
 
 #include "main.h"
 
-#include "bmpio.h"
+#include "bmpio.c_file"
 
 //requirements
 #include "FONT.h"
@@ -163,6 +163,7 @@ struct datablob {
     int xp;
 };
 
+
 //global definitions
 double colorHue = COLOR_ORANGE;//0.41; //Interressante Farben sind ungefähr alle 1/7 auf der Skala.
                                //0.08 = Orange !
@@ -175,6 +176,7 @@ struct datablob storage;
 
 // Funktionen die später kommen.
 void writeToFile(const char* name, double* hslColors, double colorHue);
+void writeToBMPFile(const char* name, double* hslColors, double colorHue);
 void insertAt(double* canvas, int canvas_x, int canvas_y, struct image* image);
 double convertHueToRGB(double var1, double var2, double d);
 struct RGBColor convertHSLtoRGB(struct HSLColor color);
@@ -294,7 +296,8 @@ int main() //int argc, const char * argv[] //hauptteil
         mode = MODE_STATUS_CND;
         colorHue = COLOR_GREEN;
         drawScreen(hslOutputArray, screen,tab, mode);
-        writeToFile("output.ppm", hslOutputArray, colorHue);
+        writeToBPMFile("output.bpm", hslOutputArray, colorHue); //FIXME no working bmp file
+        writeToFile("output.ppm", hslOutputArray, colorHue); //until BMP is fixed
     }
     displayHelp();
     char c;
@@ -376,7 +379,9 @@ int main() //int argc, const char * argv[] //hauptteil
         }
         //printf("Switching Screen (%c): %d,%d, %d\n", c, screen, tab, mode);
         drawScreen(hslOutputArray, screen,tab, mode);
-        writeToFile("output.ppm", hslOutputArray, colorHue);
+        writeToBMPFile("output.bmp", hslOutputArray, colorHue);
+        writeToFile("output.ppm", hslOutputArray, colorHue); //until BMP is fixed
+
     } while(!quit);
     
     /*
@@ -552,7 +557,27 @@ double doMathMagic(double canvas, double image, double alpha){
     }
 }
 
-
+void writeToBMPFile(const char* name, double* hslColors, double colorHue){
+    static unsigned char rgb[DIM_X * DIM_Y * 3];
+    for (int y = 0; y < DIM_Y; y++)
+    {
+        for (int x = 0; x < DIM_X; x++)
+        {
+            struct HSLColor image_hsla_pixel;
+            int i = (y * DIM_X * 2) + (x * 2);
+            int j = (y * DIM_X * 3) + (x * 3);
+            image_hsla_pixel.h = colorHue;
+            
+            image_hsla_pixel.s = (hslColors[i + S]);
+            image_hsla_pixel.l = (hslColors[i + L]);
+            struct RGBColor rgb_pixel  = convertHSLtoRGB(image_hsla_pixel);
+            rgb[j+0] = rgb_pixel.r;
+            rgb[j+1] = rgb_pixel.g;
+            rgb[j+2] = rgb_pixel.b;
+        }
+    }
+    writeBMP(rgb, DIM_X, DIM_Y, name);
+}
 void writeToFile(const char* name, double* hslColors, double colorHue) {
     
     //printf("Starting image output to \"%s\".\n", name);
