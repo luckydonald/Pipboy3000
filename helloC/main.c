@@ -296,7 +296,7 @@ int main() //int argc, const char * argv[] //hauptteil
         mode = MODE_STATUS_CND;
         colorHue = COLOR_GREEN;
         drawScreen(hslOutputArray, screen,tab, mode);
-        writeToBPMFile("output.bpm", hslOutputArray, colorHue); //FIXME no working bmp file
+        writeToBMPFile("output.bpm", hslOutputArray, colorHue); //FIXME no working bmp file
         writeToFile("output.ppm", hslOutputArray, colorHue); //until BMP is fixed
     }
     displayHelp();

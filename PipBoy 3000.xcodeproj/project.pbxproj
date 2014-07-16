@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85123DBF1976FC10003F82E1 /* bmpio.c_file in Sources */ = {isa = PBXBuildFile; fileRef = 85123DBD1976FC10003F82E1 /* bmpio.c_file */; };
 		859EE70D1947819D00600C51 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 859EE70C1947819D00600C51 /* main.c */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		85123DBD1976FC10003F82E1 /* bmpio.c_file */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bmpio.c_file; sourceTree = "<group>"; };
+		85123DBE1976FC10003F82E1 /* bmpio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bmpio.h; sourceTree = "<group>"; };
 		853980F91969A706003DCC72 /* font_monofont_16.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_16.h; sourceTree = "<group>"; };
 		853E599A196EF24800E2DD12 /* font_monofont_20.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_monofont_20.h; sourceTree = "<group>"; };
 		85598D761965A250000D214C /* font_a.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = font_a.h; sourceTree = "<group>"; };
@@ -71,6 +74,8 @@
 		859EE70B1947819D00600C51 /* PipBoy 3000 */ = {
 			isa = PBXGroup;
 			children = (
+				85123DBD1976FC10003F82E1 /* bmpio.c_file */,
+				85123DBE1976FC10003F82E1 /* bmpio.h */,
 				85FDE664194F146B00D7D7EC /* main.h */,
 				858CD9AB196E773600F2BEEC /* image_bg.h */,
 				858CD9AC196E773600F2BEEC /* image_pip.h */,
@@ -143,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				859EE70D1947819D00600C51 /* main.c in Sources */,
+				85123DBF1976FC10003F82E1 /* bmpio.c_file in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
