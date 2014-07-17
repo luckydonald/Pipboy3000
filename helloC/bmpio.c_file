@@ -16,17 +16,24 @@ void insertDWord(unsigned char *data, int offset, int word) {
 	data[offset + 3] = (unsigned char)(word >> 24);
 }
 
+/**
+ * Write imagedata to .bmp file
+ *
+ * \param data: pointer to unsigned char array with image data in BGR format
+ * \param width: width of the imagen in pixels
+ * \param height: heigth of the imagen in pixels
+ * \param path: path where the image is saved
+ */
 int writeBMP(unsigned char *data, int width, int height, const char *path) {
 
 	FILE *fp = fopen(path, "wb"); // b - binary mode
-
 
 	int fill = (width * 3) % 4;
 
 	int imageDataSize = ((width * 3) + fill) * height;
 	int fileSize = imageDataSize + 14 + 40;
 
-	unsigned char filler[] = {0, 0, 0, 0};
+	unsigned char filler[] = {0, 0, 0};
 	
 	unsigned char bmpFileHeader[14];
 	unsigned char bmpInfoHeader[40];
@@ -60,6 +67,7 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 	}
     //for (int i = 0; i<fill;  i++){
     unsigned char endfill[((width * 3) + fill)];
+    memset(endfill,0,sizeof(endfill));
     fwrite(endfill, ((width * 3) + fill), 1, fp);
     //}
 	fclose(fp);

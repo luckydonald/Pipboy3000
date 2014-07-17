@@ -30,7 +30,8 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 
 	int fill = (width * 3) % 4;
 
-	int imageDataSize = (width * 3 + fill) * height;
+	int imageDataSize = ((width * 3) + fill) * height;
+	int fileSize = imageDataSize + 14 + 40;
 
 	unsigned char filler[] = {0, 0, 0};
 	
@@ -39,6 +40,7 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 
 	bmpFileHeader[0] = 'B';
 	bmpFileHeader[1] = 'M';
+    insertDWord(bmpFileHeader, 2, fileSize); // size of full bmp file
 	insertDWord(bmpFileHeader, 6, 0);
 	insertDWord(bmpFileHeader, 10, 54);
 
@@ -49,8 +51,10 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 	insertWord(bmpInfoHeader, 14, 24);				// bits per pixel
 	insertDWord(bmpInfoHeader, 16, 0);				// no compression
 	insertDWord(bmpInfoHeader, 20, imageDataSize);	// size of image data
-	insertDWord(bmpInfoHeader, 24, 0);				// x dpi
-	insertDWord(bmpInfoHeader, 28, 0);				// y dpi
+	insertDWord(bmpInfoHeader, 24, 2835);				// x dpi
+    
+	insertDWord(bmpInfoHeader, 28, 2835);				// y dpi
+    
 	insertDWord(bmpInfoHeader, 32, 0);				// no colortable
 	insertDWord(bmpInfoHeader, 36, 0);				// no colors from colortable used
 
@@ -61,5 +65,11 @@ int writeBMP(unsigned char *data, int width, int height, const char *path) {
 		fwrite(&data[y * width * 3], 3, width, fp);
 		fwrite(filler, 1, fill, fp);
 	}
+    //for (int i = 0; i<fill;  i++){
+    unsigned char endfill[((width * 3) + fill)];
+    memset(endfill,0,sizeof(endfill));
+    fwrite(endfill, ((width * 3) + fill), 1, fp);
+    //}
 	fclose(fp);
+	return 42; //TODO.
 }

@@ -99,9 +99,11 @@
 
 #include "main.h"
 
-//#include "bmpio.c_file" NOTE: Absolutly never include c files directly!
-
 #include "bmpio.h"
+//#include "bmpio.c_file" //NOTE: Absolutly never include c files directly!
+                        //Well, Linker Failes.
+                        //See Comment https://bitbucket.org/luckydonald/pip-boy-3000/commits/63e7c285dfa319b51be185d67bedf7e218a85cd4#chg-helloC/main.c
+                        //fixed by not importing it... (?!?)
 
 //requirements
 #include "FONT.h"
