@@ -99,7 +99,9 @@
 
 #include "main.h"
 
-#include "bmpio.c_file"
+//#include "bmpio.c_file" NOTE: Absolutly never include c files directly!
+
+#include "bmpio.h"
 
 //requirements
 #include "FONT.h"
