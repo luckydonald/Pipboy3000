@@ -296,7 +296,7 @@ int main() //int argc, const char * argv[] //hauptteil
         mode = MODE_STATUS_CND;
         colorHue = COLOR_GREEN;
         drawScreen(hslOutputArray, screen,tab, mode);
-        writeToBMPFile("output.bpm", hslOutputArray, colorHue); //FIXME no working bmp file
+        writeToBMPFile("output.bmp", hslOutputArray, colorHue); //FIXME no working bmp file
         writeToFile("output.ppm", hslOutputArray, colorHue); //until BMP is fixed
     }
     displayHelp();
@@ -565,15 +565,16 @@ void writeToBMPFile(const char* name, double* hslColors, double colorHue){
         {
             struct HSLColor image_hsla_pixel;
             int i = (y * DIM_X * 2) + (x * 2);
+            //int j = DIM_Y - 1 - ((y * DIM_X * 3) + (x * 3));
             int j = (y * DIM_X * 3) + (x * 3);
             image_hsla_pixel.h = colorHue;
             
             image_hsla_pixel.s = (hslColors[i + S]);
             image_hsla_pixel.l = (hslColors[i + L]);
             struct RGBColor rgb_pixel  = convertHSLtoRGB(image_hsla_pixel);
-            rgb[j+0] = rgb_pixel.r;
+            rgb[j+0] = rgb_pixel.b;
             rgb[j+1] = rgb_pixel.g;
-            rgb[j+2] = rgb_pixel.b;
+            rgb[j+2] = rgb_pixel.r;
         }
     }
     writeBMP(rgb, DIM_X, DIM_Y, name);
