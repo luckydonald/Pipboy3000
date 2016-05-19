@@ -915,7 +915,6 @@ int numDigits(int x)
 {
     //if (x == MIN_INT) return 10 + 1;
     if (x < 0) return numDigits(-x) + 1;
-    
     if (x >= 10000) {
         if (x >= 10000000) {
             if (x >= 100000000) {
@@ -1101,7 +1100,7 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
         char buffer[1];
         itoa (storage.level,buffer,10);
         type_string(canvas, 94, 10, & font_monofont_16, "LVL", 0);
-        type_string(canvas, 94 + 24 + ((2-length) * 6)  , 10, & font_monofont_16, buffer, 0);
+        type_string(canvas, ((length-2) * 6)  , 10, & font_monofont_16, buffer, 0);
         drawFadedLine(canvas, 132, 10,  1, 18, BOTTOM); // - - - - - - - top line, faded part, left side
         length = numDigits(storage.hp);
         char buffer2[1];
@@ -1160,7 +1159,7 @@ void drawScreen(double* canvas, byte screen, byte tab, byte mode){
             drawBox(canvas, 222-7, DIM_Y - 21,  50, 20); // - - - Skills
         } else if (tab & TAB_STAT_PERKS) {
             drawBox(canvas, 321-7, DIM_Y - 21,  44, 20); // - - - Perks
-        } else if (tab & TAB_STAT_GENERAL) { //TAB_STAT_GENERAL
+        } else if (tab & TAB_STAT_GENERAL) {  //TAB_STAT_GENERAL
             drawBox(canvas, 411-7, DIM_Y - 21,  56, 20); // - - - General
             
         } else {
